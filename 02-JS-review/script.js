@@ -177,3 +177,10 @@ const updatedBook = {
   pages: 1210,
 };
 updatedBook;
+
+// 3. Template Literals
+
+const sumary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${
+  publicationDate.split('-')[0]
+}`;
+console.log(sumary);
