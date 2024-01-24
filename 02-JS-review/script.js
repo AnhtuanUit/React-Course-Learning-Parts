@@ -206,7 +206,7 @@ const sumary = `${title}, a ${pages}-page long book, was written by ${author} an
 
 console.log(sumary);
 ////////////////////////////////////////////////
-// Short-Circuiting And Logical Operators: &&, ||, ??
+// 6. Short-Circuiting And Logical Operators: &&, ||, ??
 
 console.log(true && 'Some string');
 console.log(false && 'Some string');
@@ -232,7 +232,7 @@ console.log(countWrong);
 const count = book.reviews.librarything.reviewsCount ?? 'no data';
 console.log(count);
 
-// Optional Chaining
+// 7. Optional Chaining
 function getTotalReviewCount(book) {
   const goodreads = book.reviews?.goodreads.reviewsCount;
   const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
@@ -240,3 +240,20 @@ function getTotalReviewCount(book) {
 }
 
 console.log(getTotalReviewCount(getBook(2)));
+
+// 8. The Array Map Method
+const books = getBooks();
+console.log(books);
+const x = [1, 2, 3, 4, 5].map(el => el * 2);
+console.log(x);
+
+const titles = books.map(book => book.title);
+console.log(titles);
+
+const essentialData = books.map(book => ({
+  title: book.title,
+  author: book.author,
+  reviewsCount: getTotalReviewCount(book),
+}));
+
+console.log(essentialData);
