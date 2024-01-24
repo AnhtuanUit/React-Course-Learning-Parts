@@ -268,3 +268,9 @@ console.log(longBooksWithMovie);
 const adventureBooks = books.filter(book => book.genres.includes('adventure'));
 
 console.log(adventureBooks);
+
+////////////////////////////////////////////////
+// The Array reduce Method
+
+const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
+console.log(pagesAllBooks);
