@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const pizzaData = [
+/* const pizzaData = [
   {
     name: 'Focaccia',
     ingredients: 'Bread with italian olive oil and rosemary',
@@ -44,7 +44,7 @@ const pizzaData = [
     photoName: 'pizzas/prosciutto.jpg',
     soldOut: false,
   },
-];
+]; */
 
 function App() {
   return (
