@@ -180,7 +180,17 @@ updatedBook;
 
 // 3. Template Literals
 
+// const sumary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${
+//   publicationDate.split('-')[0]
+// }`;
+// console.log(sumary);
+
+// 4. Ternaries Instead of if/else Statements
+
 const sumary = `${title}, a ${pages}-page long book, was written by ${author} and published in ${
   publicationDate.split('-')[0]
-}`;
-console.log(sumary);
+}. The book has ${hasMovieAdaptation ? '' : 'not'} been adapted as a movie`;
+
+const pagesRange = pages > 1000 ? 'over a thousand' : 'less than 1000';
+
+console.log(`The book has ${pagesRange} pages`);
