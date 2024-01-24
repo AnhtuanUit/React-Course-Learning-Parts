@@ -270,13 +270,13 @@ const adventureBooks = books.filter(book => book.genres.includes('adventure'));
 console.log(adventureBooks);
 
 ////////////////////////////////////////////////
-// The Array reduce Method
+// 10. The Array reduce Method
 
 const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
 console.log(pagesAllBooks);
 
 ////////////////////////////////////////////////
-// The Array sort Method
+// 11. The Array sort Method
 const arr = [3, 7, 1, 9, 6];
 const sorted = arr.slice().sort((a, b) => a - b);
 console.log(sorted);
@@ -285,3 +285,28 @@ console.log(arr);
 const sortedByPages = books.slice().sort((a, b) => a.pages - b.pages);
 
 console.log(sortedByPages);
+
+////////////////////////////////////////////////
+
+// 12. Working With Immutable Arrays - 1,2,3
+// 1) Add book object to array
+const newBook = {
+  id: 6,
+  title: 'Harry Potter and the Chamber of Secrets',
+  author: 'J. K. Rowling',
+};
+
+const booksAfterAdd = [...books, newBook];
+console.log(booksAfterAdd);
+
+// 2) Delete book object from array
+const booksAfterDelete = booksAfterAdd.filter(book => book.id !== 3);
+console.log(booksAfterDelete);
+console.log(books);
+
+// 3) Update book object from array
+const booksAfterUpdate = booksAfterDelete.map(book =>
+  book.id === 1 ? { ...book, pages: 1210 } : book
+);
+
+console.log(booksAfterUpdate);
