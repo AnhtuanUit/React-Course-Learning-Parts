@@ -144,7 +144,7 @@ function getBook(id) {
 }
 
 // 1. Destructuring
-const book = getBook(3);
+const book = getBook(2);
 
 book;
 
@@ -205,3 +205,29 @@ const sumary = `${title}, a ${pages}-page long book, was written by ${author} an
 )}. The book has ${hasMovieAdaptation ? '' : 'not'} been adapted as a movie`;
 
 console.log(sumary);
+////////////////////////////////////////////////
+// Short-Circuiting And Logical Operators: &&, ||, ??
+
+console.log(true && 'Some string');
+console.log(false && 'Some string');
+console.log(hasMovieAdaptation && 'This book has a movie');
+
+// falsy: 0, '', null, undefined
+console.log('tuan' || 'Some string');
+console.log(false || 'Some string');
+
+console.log(true || 'Some string');
+console.log(false || 'Some string');
+
+console.log(book.translations.spanish);
+
+const spanishTranslation = book.translations.spanish || 'NOT TRANSLATED';
+console.log(spanishTranslation);
+
+console.log(book.reviews.librarything.reviewsCount);
+
+const countWrong = book.reviews.librarything.reviewsCount || 'no data';
+
+console.log(countWrong);
+const count = book.reviews.librarything.reviewsCount ?? 'no data';
+console.log(count);
