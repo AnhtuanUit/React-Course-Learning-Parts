@@ -316,3 +316,16 @@ console.log(booksAfterUpdate);
 fetch('https://jsonplaceholder.typicode.com/todos')
   .then(res => res.json())
   .then(data => console.log('data', data.length));
+
+// 14. Asynchronous Javascript: Async/Await
+
+async function getTodos() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await res.json();
+  console.log(data);
+  return data;
+}
+
+// const todos = getTodos();
+// console.log(todos);
+console.log('tuan');
