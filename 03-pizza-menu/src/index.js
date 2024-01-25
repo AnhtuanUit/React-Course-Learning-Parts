@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 
-/* const pizzaData = [
+const pizzaData = [
   {
     name: 'Focaccia',
     ingredients: 'Bread with italian olive oil and rosemary',
@@ -45,7 +45,7 @@ import './index.css';
     photoName: 'pizzas/prosciutto.jpg',
     soldOut: false,
   },
-]; */
+];
 
 function App() {
   return (
@@ -58,26 +58,23 @@ function App() {
 }
 
 function Header() {
-  return <h1 className="header">Fast React Pizza Co.</h1>;
+  return (
+    <header className="header">
+      <h1>Fast React Pizza Co.</h1>
+    </header>
+  );
 }
 
 function Menu() {
   return (
-    <div className="meny">
-      <h2 className="pizza">Our menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        src="pizzas/spinaci.jpg"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        price={10}
-      />
-      <Pizza
-        name="Pizza Funghi"
-        src="pizzas/funghi.jpg"
-        ingredients="Tomato, mushrooms"
-        price={12}
-      />
-    </div>
+    <main className="menu">
+      <h2>Our menu</h2>
+      <ul className="pizzas">
+        {pizzaData.map(pizza => (
+          <Pizza pizzaObj={pizza} key={pizza.name} />
+        ))}
+      </ul>
+    </main>
   );
 }
 
@@ -101,14 +98,14 @@ function Footer() {
 
 function Pizza(props) {
   return (
-    <div className="pizza">
-      <img src={props.src} alt={props.name} />
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price + 3}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
