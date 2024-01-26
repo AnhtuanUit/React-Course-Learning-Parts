@@ -12,15 +12,15 @@ export default function App() {
   const [isOpen, setOpen] = useState(true);
 
   function handlePrevious() {
-    step > 1 && setStep(curStep => curStep - 1);
+    step > 1 && setStep(s => s - 1);
   }
   function handleNext() {
-    step < 3 && setStep(curStep => curStep + 1);
+    step < 3 && setStep(s => s + 1);
   }
 
   return (
     <>
-      <button className="close" onClick={() => setOpen(!isOpen)}>
+      <button className="close" onClick={o => setOpen(!o)}>
         &times;
       </button>
       {isOpen && (
