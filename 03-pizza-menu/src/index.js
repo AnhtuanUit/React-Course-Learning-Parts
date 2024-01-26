@@ -96,7 +96,7 @@ function Footer() {
   const openHours = 7;
   const closeHours = 10;
   const isOpen = openHours <= hours && hours <= closeHours;
-  console.log(isOpen);
+
   // if (openHours <= hours && hours <= closeHours) {
   //   alert(`We're currently open!`);
   // } else {
@@ -128,15 +128,15 @@ function Order({ closeHours, openHours }) {
 
 function Pizza({ pizzaObj }) {
   // if (pizzaObj.soldOut) return null;
-  console.log(pizzaObj);
+  // console.log(pizzaObj);
 
   return (
-    <li className="pizza">
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3>{pizzaObj.name}</h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>{pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? 'SOLD OUT' : pizzaObj.price}</span>
       </div>
     </li>
   );
