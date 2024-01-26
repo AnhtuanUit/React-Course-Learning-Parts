@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import './index.css';
 
 const messages = [
@@ -9,7 +9,12 @@ const messages = [
 
 export default function App() {
   const step = 1;
-
+  function handlePrevious() {
+    console.log('Previous');
+  }
+  function handleNext() {
+    console.log('Next');
+  }
   return (
     <div className="steps">
       <div className="numbers">
@@ -21,10 +26,19 @@ export default function App() {
         Step {step}: {messages[step - 1]}
       </p>
       <div className="buttons">
-        <button style={{ backgroundColor: 'blue', color: '#fff' }}>
-          Privious
+        <button
+          style={{ backgroundColor: 'blue', color: '#fff' }}
+          onClick={handlePrevious}
+        >
+          Previous
         </button>
-        <button style={{ backgroundColor: 'blue', color: '#fff' }}>Next</button>
+
+        <button
+          style={{ backgroundColor: 'blue', color: '#fff' }}
+          onClick={handleNext}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
