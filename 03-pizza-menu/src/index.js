@@ -67,16 +67,19 @@ function Header() {
 
 function Menu() {
   const pizzas = pizzaData;
+  // const pizzas = [];
 
   return (
     <main className="menu">
       <h2>Our menu</h2>
-      {pizzas.length > 0 && (
+      {pizzas.length > 0 ? (
         <ul className="pizzas">
           {pizzaData.map(pizza => (
             <Pizza pizzaObj={pizza} key={pizza.name} />
           ))}
         </ul>
+      ) : (
+        <p>We're still working on menu. Please come back later : )</p>
       )}
     </main>
   );
@@ -84,7 +87,7 @@ function Menu() {
 
 function Footer() {
   const hours = new Date().getHours();
-  const openHours = 7;
+  const openHours = 12;
   const closeHours = 10;
   const isOpen = openHours <= hours && hours <= closeHours;
   console.log(isOpen);
@@ -95,10 +98,14 @@ function Footer() {
   // }
   return (
     <footer className="footer">
-      {isOpen && (
+      {isOpen ? (
         <div className="order">
           <p>We're open util {closeHours}:00. Come visit us or order online.</p>
         </div>
+      ) : (
+        <p>
+          We're happy to welcome you between {openHours}:00 and {closeHours}:00.
+        </p>
       )}
     </footer>
   );
