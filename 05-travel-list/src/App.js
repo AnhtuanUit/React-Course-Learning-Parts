@@ -4,18 +4,30 @@ export default function App() {
   const [items, setItems] = useState([]);
 
   function handleAddItems(item) {
-    setItems(sItems => [...sItems, item]);
+    setItems(items => [...items, item]);
   }
 
-  function handleDeleteItems(id) {
-    setItems(sItems => sItems.filter(item => item.id !== id));
+  function handleDeleteItem(id) {
+    setItems(items => items.filter(item => item.id !== id));
+  }
+
+  function handleToggleItem(id) {
+    setItems(items =>
+      items.map(item =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
   }
 
   return (
     <div className="app">
       <Header />
       <Form onAddItems={handleAddItems} />
-      <PackageList items={items} onDeleteItems={handleDeleteItems} />
+      <PackageList
+        items={items}
+        onDeleteItem={handleDeleteItem}
+        onToggleItem={handleToggleItem}
+      />
       <Stats />
     </div>
   );
@@ -69,25 +81,35 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackageList({ items, onDeleteItems }) {
+function PackageList({ items, onDeleteItem, onToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map(item => (
-          <Item key={item.id} item={item} onDeleteItems={onDeleteItems} />
+          <Item
+            key={item.id}
+            item={item}
+            onDeleteItem={onDeleteItem}
+            onToggleItem={onToggleItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item, onDeleteItems }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li>
+      <input
+        type="checkbox"
+        value={item.packed}
+        onClick={() => onToggleItem(item.id)}
+      />
       <span style={item.packed ? { textDecoration: 'line-through' } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button onClick={() => onDeleteItems(item.id)}>❌</button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
