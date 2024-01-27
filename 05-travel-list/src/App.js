@@ -1,6 +1,8 @@
+import { useState } from 'react';
+
 const initialItems = [
-  { id: 1, desciption: 'Passports', quantity: 2, packed: true },
-  { id: 2, desciption: 'Socks', quantity: 12, packed: false },
+  { id: 1, description: 'Passports', quantity: 2, packed: true },
+  { id: 2, description: 'Socks', quantity: 12, packed: false },
 ];
 
 export default function App() {
@@ -19,21 +21,44 @@ function Header() {
 }
 
 function Form() {
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(1);
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('FORM SUBMIT');
+
+    // 0) Guard check
+    if (!description) return;
+    // 1) Create item data
+    const item = {
+      id: initialItems.at(-1).id + 1,
+      description,
+      quantity,
+      packed: false,
+    };
+    // 2) Push to global items
+    console.log(item);
+    initialItems.push(item);
+    // 3) Clearn the input
+    setDescription('');
+    setQuantity(1);
   }
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip?</h3>
-      <select>
+      <select value={quantity} onChange={e => setQuantity(+e.target.value)}>
         {Array.from({ length: 20 }, (_, i) => i + 1).map(num => (
           <option key={num} value={num}>
             {num}
           </option>
         ))}
       </select>
-      <input type="text" placeholder="Item..." />
+      <input
+        type="text"
+        placeholder="Item..."
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+      />
       <button>Add</button>
     </form>
   );
@@ -55,7 +80,7 @@ function Item({ item }) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: 'line-through' } : {}}>
-        {item.quantity} {item.desciption}
+        {item.quantity} {item.description}
       </span>
       <button>❌</button>
     </li>
