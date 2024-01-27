@@ -6,11 +6,17 @@ const initialItems = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems(sItems => [...sItems, item]);
+  }
+
   return (
     <div className="app">
       <Header />
-      <Form />
-      <PackageList />
+      <Form onAddItems={handleAddItems} />
+      <PackageList items={items} />
       <Stats />
     </div>
   );
@@ -20,7 +26,7 @@ function Header() {
   return <h1>🏝️ FAR AWAY 🧳</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState(1);
 
@@ -31,14 +37,14 @@ function Form() {
     if (!description) return;
     // 1) Create item data
     const item = {
-      id: initialItems.at(-1).id + 1,
+      id: Date.now(),
       description,
       quantity,
       packed: false,
     };
-    // 2) Push to global items
-    console.log(item);
-    initialItems.push(item);
+    // 2)
+    onAddItems(item);
+
     // 3) Clearn the input
     setDescription('');
     setQuantity(1);
@@ -64,11 +70,11 @@ function Form() {
   );
 }
 
-function PackageList() {
+function PackageList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map(item => (
+        {items.map(item => (
           <Item key={item.id} item={item} />
         ))}
       </ul>
