@@ -19,12 +19,23 @@ function Header() {
 }
 
 function Form() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log('FORM SUBMIT');
+  }
   return (
-    <div className="add-form">
-      <form>
-        <h3>What do you need for your 😍 trip?</h3>
-      </form>
-    </div>
+    <form className="add-form" onSubmit={handleSubmit}>
+      <h3>What do you need for your 😍 trip?</h3>
+      <select>
+        {Array.from({ length: 20 }, (_, i) => i + 1).map(num => (
+          <option key={num} value={num}>
+            {num}
+          </option>
+        ))}
+      </select>
+      <input type="text" placeholder="Item..." />
+      <button>Add</button>
+    </form>
   );
 }
 
@@ -33,7 +44,7 @@ function PackageList() {
     <div className="list">
       <ul>
         {initialItems.map(item => (
-          <Item item={item} />
+          <Item key={item.id} item={item} />
         ))}
       </ul>
     </div>
