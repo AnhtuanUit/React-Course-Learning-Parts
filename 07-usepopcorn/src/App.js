@@ -62,13 +62,13 @@ export default function App() {
         <NumResults movies={movies} />
       </NavBar>
       <Main>
-        <MovieListBox>
+        <Box>
           <MovieList movies={movies} />
-        </MovieListBox>
-        <WatchedBox>
+        </Box>
+        <Box>
           <WatchedSumary watched={watched} />
           <WatchedMovieList watched={watched} />
-        </WatchedBox>
+        </Box>
       </Main>
     </>
   );
@@ -111,14 +111,14 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function MovieListBox({ children }) {
-  const [isOpen1, setIsOpen1] = useState(true);
+function Box({ children }) {
+  const [isOpen, setIsOpen] = useState(true);
   return (
     <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen1(open => !open)}>
-        {isOpen1 ? '–' : '+'}
+      <button className="btn-toggle" onClick={() => setIsOpen(open => !open)}>
+        {isOpen ? '–' : '+'}
       </button>
-      {isOpen1 && children}
+      {isOpen && children}
     </div>
   );
 }
@@ -148,7 +148,7 @@ function Movie({ movie }) {
   );
 }
 
-function WatchedBox({ children }) {
+/* function WatchedBox({ children }) {
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
@@ -159,7 +159,7 @@ function WatchedBox({ children }) {
       {isOpen2 && <>{children}</>}
     </div>
   );
-}
+}*/
 
 function WatchedSumary({ watched }) {
   const avgImdbRating = average(watched.map(movie => movie.imdbRating));
