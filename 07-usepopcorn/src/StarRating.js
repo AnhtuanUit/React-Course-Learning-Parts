@@ -11,25 +11,28 @@ const starContainerStyle = {
   gap: '4px',
 };
 
-const textStyle = {
-  lineHeight: '1',
-  margin: '0',
-};
-
-const starStyle = {
-  width: '48px',
-  height: '48px',
-  display: 'block',
-  cursor: 'pointer',
-};
-
-export default function StarRating({ maxRating = 5 }) {
-  const [rating, setRating] = useState(0);
+export default function StarRating({
+  maxRating = 5,
+  color = '#fcc419',
+  size = 48,
+  messages = [],
+  onSetRating,
+  defaultRating = 0,
+}) {
+  const [rating, setRating] = useState(defaultRating);
   const [temRating, setTemRating] = useState(0);
 
   function handleRating(rating) {
     setRating(rating);
+    onSetRating && onSetRating(rating);
   }
+
+  const textStyle = {
+    lineHeight: '1',
+    margin: '0',
+    color,
+    fontSize: `${size / 1.5}px`,
+  };
 
   return (
     <div style={containerStyle}>
@@ -41,15 +44,28 @@ export default function StarRating({ maxRating = 5 }) {
             onRate={() => handleRating(i + 1)}
             onHoverIn={() => setTemRating(i + 1)}
             onHoverOut={() => setTemRating(0)}
+            color={color}
+            size={size}
           />
         ))}
       </div>
-      <p style={textStyle}>{temRating || rating || ''}</p>
+      <p style={textStyle}>
+        {(temRating && messages[temRating - 1]) ||
+          (rating && messages[rating - 1]) ||
+          ''}
+      </p>
     </div>
   );
 }
 
-function Star({ full, color = 'black', onRate, onHoverIn, onHoverOut }) {
+function Star({ full, color, onRate, onHoverIn, onHoverOut, size }) {
+  const starStyle = {
+    width: `${size}px`,
+    height: `${size}px`,
+    display: 'block',
+    cursor: 'pointer',
+  };
+
   return (
     <span
       style={starStyle}
@@ -63,7 +79,6 @@ function Star({ full, color = 'black', onRate, onHoverIn, onHoverOut }) {
           viewBox="0 0 20 20"
           fill={color}
           stroke={color}
-          fontSize={'48px'}
         >
           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
         </svg>
@@ -73,7 +88,6 @@ function Star({ full, color = 'black', onRate, onHoverIn, onHoverOut }) {
           fill="none"
           viewBox="0 0 24 24"
           stroke={color}
-          fontSize={'48px'}
         >
           <path
             strokeLinecap="round"
