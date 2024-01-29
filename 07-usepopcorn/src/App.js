@@ -56,20 +56,26 @@ export default function App() {
 
   return (
     <>
-      <NavBar movies={movies} />
-      <Main movies={movies} watched={watched} />
+      <NavBar>
+        <Logo />
+        <Search />
+        <NumResults movies={movies} />
+      </NavBar>
+      <Main>
+        <MovieListBox>
+          <MovieList movies={movies} />
+        </MovieListBox>
+        <WatchedBox>
+          <WatchedSumary watched={watched} />
+          <WatchedMovieList watched={watched} />
+        </WatchedBox>
+      </Main>
     </>
   );
 }
 
-function NavBar({ movies }) {
-  return (
-    <nav className="nav-bar">
-      <Logo />
-      <Search />
-      <NumResults movies={movies} />
-    </nav>
-  );
+function NavBar({ children }) {
+  return <nav className="nav-bar">{children}</nav>;
 }
 
 function Search() {
@@ -101,23 +107,18 @@ function NumResults({ movies }) {
   );
 }
 
-function Main({ movies, watched }) {
-  return (
-    <main className="main">
-      <MovieListBox movies={movies} />
-      <WatchedBox watched={watched} />
-    </main>
-  );
+function Main({ children }) {
+  return <main className="main">{children}</main>;
 }
 
-function MovieListBox({ movies }) {
+function MovieListBox({ children }) {
   const [isOpen1, setIsOpen1] = useState(true);
   return (
     <div className="box">
       <button className="btn-toggle" onClick={() => setIsOpen1(open => !open)}>
         {isOpen1 ? '–' : '+'}
       </button>
-      {isOpen1 && <MovieList movies={movies} />}
+      {isOpen1 && children}
     </div>
   );
 }
@@ -147,7 +148,7 @@ function Movie({ movie }) {
   );
 }
 
-function WatchedBox({ watched }) {
+function WatchedBox({ children }) {
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
@@ -155,12 +156,7 @@ function WatchedBox({ watched }) {
       <button className="btn-toggle" onClick={() => setIsOpen2(open => !open)}>
         {isOpen2 ? '–' : '+'}
       </button>
-      {isOpen2 && (
-        <>
-          <WatchedSumary watched={watched} />
-          <WatchedMovieList watched={watched} />
-        </>
-      )}
+      {isOpen2 && <>{children}</>}
     </div>
   );
 }
