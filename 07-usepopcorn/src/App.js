@@ -55,10 +55,38 @@ const KEY = '3bc4c000';
 export default function App() {
   const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    return JSON.parse(localStorage.getItem('watched')) || [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+
+  function handleSelectedMovie(imdbID) {
+    const isSelected = imdbID === selectedMovieId;
+
+    setSelectedMovieId(isSelected ? null : imdbID);
+  }
+
+  function handleCloseMovie() {
+    setSelectedMovieId(null);
+  }
+
+  function handleAddWatchedMovie(watchedMovie) {
+    setWatched(wMovies => [...wMovies, watchedMovie]);
+    // localStorage.setItem('watched', JSON.stringify([...watched, watchedMovie]));
+  }
+
+  function handleDeleteWatchedMovie(imdbID) {
+    setWatched(wMovies => wMovies.filter(wMovie => wMovie.imdbID !== imdbID));
+  }
+
+  useEffect(
+    function () {
+      localStorage.setItem('watched', JSON.stringify(watched));
+    },
+    [watched]
+  );
 
   useEffect(
     function () {
@@ -105,24 +133,6 @@ export default function App() {
     },
     [query]
   );
-
-  function handleSelectedMovie(imdbID) {
-    const isSelected = imdbID === selectedMovieId;
-
-    setSelectedMovieId(isSelected ? null : imdbID);
-  }
-
-  function handleCloseMovie() {
-    setSelectedMovieId(null);
-  }
-
-  function handleAddWatchedMovie(watchedMovie) {
-    setWatched(wMovies => [...wMovies, watchedMovie]);
-  }
-
-  function handleDeleteWatchedMovie(imdbID) {
-    setWatched(wMovies => wMovies.filter(wMovie => wMovie.imdbID !== imdbID));
-  }
 
   const watchMovie = watched.find(wMovie => wMovie.imdbID === selectedMovieId);
 
