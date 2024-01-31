@@ -189,6 +189,10 @@ function MovieDetails({
     imdbID,
   } = movie;
 
+  // Violating the rules
+  // if (imdbRating > 3) [isTop, setIsTop] = useState(true);
+  // if (imdbRating > 3) return <p>Violating the rules</p>;
+
   useEffect(
     function () {
       async function fetchMovie() {
