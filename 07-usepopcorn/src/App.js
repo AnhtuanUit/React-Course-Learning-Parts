@@ -163,9 +163,22 @@ function MovieDetails({
   watchMovie,
 }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [movie, setMovie] = useState(null);
+  const [movie, setMovie] = useState({});
   const [rating, setRatingStar] = useState(0);
   const [error, setError] = useState(false);
+
+  const {
+    Title: title,
+    Released: released,
+    Runtime: runtime,
+    Poster: poster,
+    Plot: plot,
+    Director: director,
+    Actors: actors,
+    imdbRating,
+    Genre: genre,
+    imdbID,
+  } = movie;
 
   useEffect(
     function () {
@@ -197,23 +210,15 @@ function MovieDetails({
     [selectedMovieId]
   );
 
-  const {
-    Title: title,
-    Released: released,
-    Runtime: runtime,
-    Poster: poster,
-    Plot: plot,
-    Director: director,
-    Actors: actors,
-    imdbRating,
-    Genre: genre,
-    imdbID,
-  } = movie || {};
-
   useEffect(
     function () {
       if (!title) return;
       document.title = `Movie | ${title}`;
+
+      return function () {
+        document.title = 'usePopcorn';
+        console.log(`Clean up effect for movie ${title}`);
+      };
     },
     [title]
   );
