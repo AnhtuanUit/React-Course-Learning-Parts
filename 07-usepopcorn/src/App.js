@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import StarRating from './StarRating';
 
 const tempMovieData = [
   {
@@ -57,7 +58,7 @@ export default function App() {
   const [watched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState({ imdbID: 'fdfsfsfsid' });
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
 
   useEffect(
     function () {
@@ -98,13 +99,14 @@ export default function App() {
     [query]
   );
 
-  function handleSelectedMovie(movie) {
-    const isSelected = movie.imdbID === selectedMovie?.imdbID;
-    setSelectedMovie(isSelected ? null : movie);
+  function handleSelectedMovie(imdbID) {
+    const isSelected = imdbID === selectedMovieId;
+    console.log(imdbID);
+    setSelectedMovieId(isSelected ? null : imdbID);
   }
 
   function handleCloseMovie() {
-    setSelectedMovie(null);
+    setSelectedMovieId(null);
   }
 
   return (
@@ -123,9 +125,9 @@ export default function App() {
           {error && <ShowError message={error} />}
         </Box>
         <Box>
-          {selectedMovie ? (
+          {selectedMovieId ? (
             <MovieDetails
-              movie={selectedMovie}
+              selectedMovieId={selectedMovieId}
               onCloseMovie={handleCloseMovie}
             />
           ) : (
@@ -140,13 +142,75 @@ export default function App() {
   );
 }
 
-function MovieDetails({ movie, onCloseMovie }) {
+function MovieDetails({ selectedMovieId, onCloseMovie }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [movie, setMovie] = useState(null);
+
+  useEffect(
+    function () {
+      async function fetchMovie() {
+        setIsLoading(true);
+        const res = await fetch(
+          `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedMovieId}`
+        );
+
+        const data = await res.json();
+
+        console.log(data);
+        setMovie(data);
+        setIsLoading(false);
+      }
+
+      fetchMovie();
+    },
+    [selectedMovieId]
+  );
+  const {
+    Title: title,
+    Released: released,
+    Runtime: runtime,
+    Poster: poster,
+    Plot: plot,
+    Director: director,
+    Actors: actors,
+    imdbRating,
+    Genre: genre,
+  } = movie || {};
   return (
     <div className="details">
-      <button className="btn-back" onClick={() => onCloseMovie()}>
-        &larr;
-      </button>
-      <p>{movie.imdbID}</p>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={() => onCloseMovie()}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of movie ${title}`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐️</span>
+                {imdbRating} IMDb rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating size={24} maxRating={10} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
@@ -225,7 +289,7 @@ function MovieList({ movies, onSelectedMovie }) {
 
 function Movie({ movie, onSelectedMovie }) {
   return (
-    <li onClick={() => onSelectedMovie(movie)}>
+    <li onClick={() => onSelectedMovie(movie.imdbID)}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
