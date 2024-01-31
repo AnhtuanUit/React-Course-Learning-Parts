@@ -196,6 +196,7 @@ function MovieDetails({
     },
     [selectedMovieId]
   );
+
   const {
     Title: title,
     Released: released,
@@ -208,6 +209,14 @@ function MovieDetails({
     Genre: genre,
     imdbID,
   } = movie || {};
+
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+    },
+    [title]
+  );
 
   function handleAddWatchedMovie() {
     onAddWatchedMovie({
