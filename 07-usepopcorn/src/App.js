@@ -53,7 +53,7 @@ const average = arr =>
 const KEY = '3bc4c000';
 
 export default function App() {
-  const [query, setQuery] = useState('iron man');
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,12 +64,17 @@ export default function App() {
     function () {
       if (!query) return;
 
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError('');
           const res = await fetch(
-            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            {
+              signal: controller.signal,
+            }
           );
           if (!res.ok)
             throw Error('Some thing went wrong with fetching movies!');
@@ -81,7 +86,9 @@ export default function App() {
 
           setMovies(data?.Search);
         } catch (err) {
-          setError(err.message);
+          if (err.name !== 'AbortError') {
+            setError(err.message);
+          }
         } finally {
           setIsLoading(false);
         }
@@ -92,7 +99,8 @@ export default function App() {
       }, 500);
 
       return function () {
-        clearTimeout(timeoutQuery);
+        controller.abort();
+        // clearTimeout(timeoutQuery);
       };
     },
     [query]
@@ -140,6 +148,7 @@ export default function App() {
               onCloseMovie={handleCloseMovie}
               onAddWatchedMovie={handleAddWatchedMovie}
               watchMovie={watchMovie}
+              key={selectedMovieId}
             />
           ) : (
             <>
@@ -217,10 +226,26 @@ function MovieDetails({
 
       return function () {
         document.title = 'usePopcorn';
-        console.log(`Clean up effect for movie ${title}`);
+        // console.log(`Clean up effect for movie ${title}`);
       };
     },
     [title]
+  );
+
+  useEffect(
+    function () {
+      function callback(e) {
+        if (e.code === 'Escape') {
+          onCloseMovie();
+        }
+      }
+      document.addEventListener('keydown', callback);
+
+      return function () {
+        document.removeEventListener('keydown', callback);
+      };
+    },
+    [onCloseMovie]
   );
 
   function handleAddWatchedMovie() {
