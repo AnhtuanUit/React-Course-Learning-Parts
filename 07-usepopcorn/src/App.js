@@ -347,6 +347,22 @@ function NavBar({ children }) {
 }
 
 function Search({ query, onQuery }) {
+  useEffect(
+    function () {
+      // How NOT to Select DOM Element in React
+      const searchEl = document.querySelector('.search');
+      document.addEventListener('keypress', function (e) {
+        if (e.code === 'Enter') {
+          if (document.activeElement !== searchEl) {
+            searchEl.focus();
+            onQuery('');
+          }
+        }
+      });
+    },
+    [onQuery]
+  );
+
   return (
     <input
       className="search"
