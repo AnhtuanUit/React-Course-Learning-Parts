@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating';
 
 // const tempMovieData = [
@@ -347,21 +347,40 @@ function NavBar({ children }) {
 }
 
 function Search({ query, onQuery }) {
+  const inputEl = useRef(null);
+
   useEffect(
     function () {
-      // How NOT to Select DOM Element in React
-      const searchEl = document.querySelector('.search');
-      document.addEventListener('keypress', function (e) {
+      function callback(e) {
         if (e.code === 'Enter') {
-          if (document.activeElement !== searchEl) {
-            searchEl.focus();
+          if (document.activeElement !== inputEl.current) {
+            inputEl.current.focus();
             onQuery('');
           }
         }
-      });
+      }
+      document.addEventListener('keypress', callback);
+
+      return () => document.removeEventListener('keypress', callback);
     },
     [onQuery]
   );
+
+  // useEffect(
+  //   function () {
+  //     // How NOT to Select DOM Element in React
+  //     const searchEl = document.querySelector('.search');
+  //     document.addEventListener('keypress', function (e) {
+  //       if (e.code === 'Enter') {
+  //         if (document.activeElement !== searchEl) {
+  //           searchEl.focus();
+  //           onQuery('');
+  //         }
+  //       }
+  //     });
+  //   },
+  //   [onQuery]
+  // );
 
   return (
     <input
@@ -370,6 +389,7 @@ function Search({ query, onQuery }) {
       placeholder="Search movies..."
       value={query}
       onChange={e => onQuery(e.target.value)}
+      ref={inputEl}
     />
   );
 }
