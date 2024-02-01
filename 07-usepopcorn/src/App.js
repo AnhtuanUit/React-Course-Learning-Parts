@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating';
 import useMovies from './useMovies';
 import useLocalStorageState from './useLocalStorageState';
+import useKey from './useKey';
 
 // const tempMovieData = [
 //   {
@@ -150,6 +151,8 @@ function MovieDetails({
   // if (imdbRating > 3) [isTop, setIsTop] = useState(true);
   // if (imdbRating > 3) return <p>Violating the rules</p>;
 
+  useKey('Escape', onCloseMovie);
+
   useEffect(
     function () {
       if (rating > 0) {
@@ -201,22 +204,6 @@ function MovieDetails({
       };
     },
     [title]
-  );
-
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === 'Escape') {
-          onCloseMovie();
-        }
-      }
-      document.addEventListener('keydown', callback);
-
-      return function () {
-        document.removeEventListener('keydown', callback);
-      };
-    },
-    [onCloseMovie]
   );
 
   function handleAddWatchedMovie() {
@@ -307,23 +294,12 @@ function NavBar({ children }) {
 
 function Search({ query, onQuery }) {
   const inputEl = useRef(null);
-
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === 'Enter') {
-          if (document.activeElement !== inputEl.current) {
-            inputEl.current.focus();
-            onQuery('');
-          }
-        }
-      }
-      document.addEventListener('keypress', callback);
-
-      return () => document.removeEventListener('keypress', callback);
-    },
-    [onQuery]
-  );
+  useKey('Enter', function () {
+    if (document.activeElement !== inputEl.current) {
+      inputEl.current.focus();
+      onQuery('');
+    }
+  });
 
   // useEffect(
   //   function () {
