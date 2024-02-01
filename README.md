@@ -8,8 +8,7 @@ Welcome to "React Course Learning Parts"! This repository chronicles my learning
 
 Click on the image above or use this 🎬 [Watch the video](https://www.youtube.com/watch?v=4uHBzYra90g) to see the demo.[!!LEARNING]
 
-
-[![Initial Live Video Demo](https://img.youtube.com/vi/NxnupCTNn9E/maxresdefault.jpg)](https://www.youtube.com/watch?v=NxnupCTNn9E)
+[![Initial Live Video Demo](https://github.com/AnhtuanUit/React-Course-Learning-Parts/assets/13465843/366c9f58-7794-4d8f-af31-01355c82394d)](https://www.youtube.com/watch?v=NxnupCTNn9E)
 Explore the live demo: [React Course Learning Parts Live Demo](https://react-course-learning-parts-tuando.netlify.app/)[!!LEARNING]
 
 Feel free to navigate through the project folders, each corresponding to a specific topic covered in the course. The mini-learning web apps within each part showcase my progress and understanding of React.
