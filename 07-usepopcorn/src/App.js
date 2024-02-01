@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import StarRating from './StarRating';
+import useMovies from './useMovies';
 
 // const tempMovieData = [
 //   {
@@ -54,13 +55,11 @@ const KEY = '3bc4c000';
 
 export default function App() {
   const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(function () {
     return JSON.parse(localStorage.getItem('watched')) || [];
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const { movies, isLoading, error } = useMovies(query);
 
   function handleSelectedMovie(imdbID) {
     const isSelected = imdbID === selectedMovieId;
@@ -86,52 +85,6 @@ export default function App() {
       localStorage.setItem('watched', JSON.stringify(watched));
     },
     [watched]
-  );
-
-  useEffect(
-    function () {
-      if (!query) return;
-
-      const controller = new AbortController();
-
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError('');
-          const res = await fetch(
-            `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            {
-              signal: controller.signal,
-            }
-          );
-          if (!res.ok)
-            throw Error('Some thing went wrong with fetching movies!');
-
-          const data = await res.json();
-          if (data.Response === 'False') {
-            throw new Error('Movie not found');
-          }
-
-          setMovies(data?.Search);
-        } catch (err) {
-          if (err.name !== 'AbortError') {
-            setError(err.message);
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      }
-
-      const timeoutQuery = setTimeout(function () {
-        fetchMovies();
-      }, 500);
-
-      return function () {
-        controller.abort();
-        clearTimeout(timeoutQuery);
-      };
-    },
-    [query]
   );
 
   const watchMovie = watched.find(wMovie => wMovie.imdbID === selectedMovieId);
