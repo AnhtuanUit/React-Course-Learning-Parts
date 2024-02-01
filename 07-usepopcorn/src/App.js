@@ -128,7 +128,7 @@ export default function App() {
 
       return function () {
         controller.abort();
-        // clearTimeout(timeoutQuery);
+        clearTimeout(timeoutQuery);
       };
     },
     [query]
