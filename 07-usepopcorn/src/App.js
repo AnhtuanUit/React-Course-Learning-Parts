@@ -185,6 +185,7 @@ function MovieDetails({
   const [movie, setMovie] = useState({});
   const [rating, setRatingStar] = useState(0);
   const [error, setError] = useState(false);
+  const countRef = useRef(0);
 
   const {
     Title: title,
@@ -199,9 +200,20 @@ function MovieDetails({
     imdbID,
   } = movie;
 
+  let count = 0;
   // Violating the rules
   // if (imdbRating > 3) [isTop, setIsTop] = useState(true);
   // if (imdbRating > 3) return <p>Violating the rules</p>;
+
+  useEffect(
+    function () {
+      if (rating > 0) {
+        countRef.current++;
+        count++;
+      }
+    },
+    [rating, count]
+  );
 
   useEffect(
     function () {
@@ -270,6 +282,8 @@ function MovieDetails({
       imdbRating: +imdbRating,
       userRating: rating,
       runtime: Number.parseInt(runtime),
+      countRatingDesisions: countRef.current,
+      count,
     });
 
     onCloseMovie();
