@@ -77,6 +77,7 @@ export default function App() {
               index={index}
               points={points}
               numQuetions={numQuetions}
+              answer={answer}
             />
             <Question answer={answer} question={question} dispatch={dispatch} />
             <NextButton dispatch={dispatch} answer={answer} />
