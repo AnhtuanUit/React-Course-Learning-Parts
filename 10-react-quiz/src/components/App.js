@@ -49,6 +49,13 @@ function reducer(state, action) {
         highscore:
           state.highscore < state.points ? state.points : state.highscore,
       };
+    case 'restart':
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: 'ready',
+        highscore: state.highscore,
+      };
     default:
       throw new Error('Unknown action');
   }
@@ -68,6 +75,7 @@ export default function App() {
       .then(data => dispatch({ type: 'dataRecieved', payload: data }))
       .catch(() => dispatch({ type: 'dataFailed' }));
   }, []);
+
   return (
     <div className="app">
       <Header />
@@ -100,6 +108,7 @@ export default function App() {
             points={points}
             maxPoints={maxPoints}
             highscore={highscore}
+            dispatch={dispatch}
           />
         )}
       </Main>
