@@ -3,10 +3,12 @@ import Header from './Header';
 import Loader from './Loader';
 import Error from './Error';
 import Main from './Main';
+import StartScreen from './StartScreen';
+import Question from './Question';
 
 const initialState = {
   questions: [],
-  // loading, ready, error, pendding, ...
+  // loading, ready, error, active, pendding, ...
   status: 'loading',
 };
 function reducer(state, action) {
@@ -19,6 +21,8 @@ function reducer(state, action) {
       };
     case 'dataFailed':
       return { ...state, status: 'error', questions: [] };
+    case 'start':
+      return { ...state, status: 'active' };
     default:
       throw new Error('Unknown action');
   }
@@ -39,21 +43,13 @@ export default function App() {
       <Main>
         {status === 'loading' && <Loader />}
         {status === 'error' && <Error />}
-        {status === 'ready' && <StartScreen numQuetions={numQuetions} />}
-
+        {status === 'ready' && (
+          <StartScreen numQuetions={numQuetions} dispatch={dispatch} />
+        )}
+        {status === 'active' && <Question />}
         {/* <p>1/15</p>
         <p>Question?</p> */}
       </Main>
-    </div>
-  );
-}
-
-function StartScreen({ numQuetions }) {
-  return (
-    <div className="start">
-      <h2>Welcome to The React Quiz!</h2>
-      <h3>{numQuetions} questions to test your React mastery</h3>
-      <button className="btn btn-ui">Let's start</button>
     </div>
   );
 }
