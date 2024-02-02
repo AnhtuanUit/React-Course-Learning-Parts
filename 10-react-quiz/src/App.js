@@ -1,11 +1,13 @@
 import { useEffect, useReducer } from 'react';
 import Header from './Header';
+import Loader from './Loader';
+import Error from './Error';
 import Main from './Main';
 
 const initialState = {
   questions: [],
   // loading, ready, error, pendding, ...
-  status: null,
+  status: 'loading',
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -23,8 +25,8 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const numQuetions = questions.length;
   useEffect(function () {
     fetch('http://localhost:9000/questions')
       .then(res => res.json())
@@ -32,12 +34,26 @@ export default function App() {
       .catch(() => dispatch({ type: 'dataFailed' }));
   }, []);
   return (
-    <div>
+    <div className="app">
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question?</p>
+        {status === 'loading' && <Loader />}
+        {status === 'error' && <Error />}
+        {status === 'ready' && <StartScreen numQuetions={numQuetions} />}
+
+        {/* <p>1/15</p>
+        <p>Question?</p> */}
       </Main>
+    </div>
+  );
+}
+
+function StartScreen({ numQuetions }) {
+  return (
+    <div className="start">
+      <h2>Welcome to The React Quiz!</h2>
+      <h3>{numQuetions} questions to test your React mastery</h3>
+      <button className="btn btn-ui">Let's start</button>
     </div>
   );
 }
