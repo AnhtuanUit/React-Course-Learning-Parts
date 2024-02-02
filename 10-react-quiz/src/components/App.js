@@ -38,7 +38,7 @@ export default function App() {
   const question = questions[index];
 
   useEffect(function () {
-    fetch('http://localhost:9000/questions')
+    fetch(`${process.env.REACT_APP_BASE_URL}questions`)
       .then(res => res.json())
       .then(data => dispatch({ type: 'dataRecieved', payload: data }))
       .catch(() => dispatch({ type: 'dataFailed' }));
