@@ -7,6 +7,7 @@ import AppLayout from './pages/AppLayout';
 import Login from './pages/Login';
 import { useEffect, useReducer } from 'react';
 import CityList from './components/CityList';
+import CountryList from './components/CountryList';
 
 const initialState = {
   cities: [],
@@ -64,7 +65,10 @@ function App() {
             path="cities"
             element={<CityList cities={cities} isLoading={isLoading} />}
           />
-          <Route path="countries" element={<p>Countries</p>} />
+          <Route
+            path="countries"
+            element={<CountryList cities={cities} isLoading={isLoading} />}
+          />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
