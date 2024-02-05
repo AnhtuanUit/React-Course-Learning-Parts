@@ -5,8 +5,49 @@ import Product from './pages/Product';
 import PageNotFound from './pages/PageNotFound';
 import AppLayout from './pages/AppLayout';
 import Login from './pages/Login';
+import { useEffect, useReducer } from 'react';
+import CityList from './components/CityList';
+
+const initialState = {
+  cities: [],
+  status: null,
+  error: null,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'fetchCities':
+      return { ...state, status: 'loading' };
+    case 'fetchSuccess':
+      return { ...state, cities: action.payload, status: 'ready' };
+    case 'fetchFail':
+      return { ...state, error: action.payload, status: 'error' };
+    default:
+      throw new Error('Unknown action');
+  }
+}
+
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function App() {
+  const [{ cities, status }, dispatch] = useReducer(reducer, initialState);
+
+  const isLoading = status === 'loading';
+
+  useEffect(function () {
+    async function fetchCities() {
+      try {
+        dispatch({ type: 'fetchCities' });
+        const res = await fetch(`${BASE_URL}/cities`);
+        if (!res.ok) throw Error('Some thing went wrong with fetching data!');
+        const data = await res.json();
+        dispatch({ type: 'fetchSuccess', payload: data });
+      } catch (err) {
+        dispatch({ type: 'fetchFail', payload: err.message });
+      }
+    }
+    fetchCities();
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -15,8 +56,14 @@ function App() {
         <Route path="product" element={<Product />} />
         <Route path="login" element={<Login />} />
         <Route path="app" element={<AppLayout />}>
-          <Route index element={<p>List of citie</p>} />
-          <Route path="cities" element={<p>List of cities</p>} />
+          <Route
+            index
+            element={<CityList cities={cities} isLoading={isLoading} />}
+          />
+          <Route
+            path="cities"
+            element={<CityList cities={cities} isLoading={isLoading} />}
+          />
           <Route path="countries" element={<p>Countries</p>} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
