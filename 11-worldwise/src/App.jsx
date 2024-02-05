@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import { useEffect, useReducer } from 'react';
 import CityList from './components/CityList';
 import CountryList from './components/CountryList';
+import City from './components/City';
 
 const initialState = {
   cities: [],
@@ -65,6 +66,7 @@ function App() {
             path="cities"
             element={<CityList cities={cities} isLoading={isLoading} />}
           />
+          <Route path="cities/:id" element={<City />} />
           <Route
             path="countries"
             element={<CountryList cities={cities} isLoading={isLoading} />}
