@@ -31,6 +31,18 @@ function reducer(state, action) {
       return { ...state, currentCity: action.payload, status: 'ready' };
     case 'createCityFail':
       return { ...state, error: action.payload, status: 'error' };
+
+    case 'deleteCity':
+      return { ...state, status: 'loading' };
+    case 'deleteCitySuccess':
+      return {
+        ...state,
+        currentCity: {},
+        cities: state.cities.filter(city => city.id !== action.payload),
+        status: 'ready',
+      };
+    case 'deleteCityFail':
+      return { ...state, error: action.payload, status: 'error' };
     default:
       throw new Error('Unknown action');
   }
@@ -80,6 +92,21 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function deleteCity(id) {
+    try {
+      dispatch({ type: 'deleteCity' });
+      const res = await fetch(`${BASE_URL}/cities/${id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw Error('Some thing went wrong with deleting data!');
+      await res.json();
+
+      dispatch({ type: 'deleteCitySuccess', payload: id });
+    } catch (err) {
+      dispatch({ type: 'deleteCityFail', payload: err.message });
+    }
+  }
+
   useEffect(function () {
     async function fetchCities() {
       try {
@@ -103,6 +130,7 @@ function CitiesProvider({ children }) {
         isLoading,
         getCity,
         createCity,
+        deleteCity,
       }}
     >
       {children}
