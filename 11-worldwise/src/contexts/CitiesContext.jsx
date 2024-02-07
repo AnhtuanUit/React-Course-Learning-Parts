@@ -24,6 +24,13 @@ function reducer(state, action) {
       return { ...state, currentCity: action.payload, status: 'ready' };
     case 'fetchCityFail':
       return { ...state, error: action.payload, status: 'error' };
+
+    case 'createCity':
+      return { ...state, status: 'loading' };
+    case 'createCitySuccess':
+      return { ...state, currentCity: action.payload, status: 'ready' };
+    case 'createCityFail':
+      return { ...state, error: action.payload, status: 'error' };
     default:
       throw new Error('Unknown action');
   }
@@ -52,6 +59,27 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function createCity(newCity) {
+    try {
+      dispatch({ type: 'createCity' });
+      const res = await fetch(`${BASE_URL}/cities`, {
+        method: 'POST',
+        body: JSON.stringify(newCity),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!res.ok) throw Error('Some thing went wrong with fetching data!');
+      const data = await res.json();
+
+      dispatch({ type: 'fetchCitiesSuccess', payload: [...cities, data] });
+
+      dispatch({ type: 'createCitySuccess', payload: data });
+    } catch (err) {
+      dispatch({ type: 'createCityFail', payload: err.message });
+    }
+  }
+
   useEffect(function () {
     async function fetchCities() {
       try {
@@ -74,6 +102,7 @@ function CitiesProvider({ children }) {
         currentCity,
         isLoading,
         getCity,
+        createCity,
       }}
     >
       {children}
