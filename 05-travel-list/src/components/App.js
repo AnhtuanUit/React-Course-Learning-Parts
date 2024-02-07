@@ -3,9 +3,10 @@ import Header from './Header';
 import Form from './Form';
 import PackageList from './PackageList';
 import Stats from './Stats';
+import useLocalStorageState from '../customHooks/useLocalStorageState';
 
 export default function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useLocalStorageState('items');
 
   function handleAddItems(item) {
     setItems(items => [...items, item]);
