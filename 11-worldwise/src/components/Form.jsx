@@ -49,7 +49,6 @@ function Form() {
         lng,
       },
     };
-    console.log(newCity);
 
     await createCity(newCity);
     navigate('/app/cities');
