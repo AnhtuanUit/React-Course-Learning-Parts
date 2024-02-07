@@ -1,7 +1,15 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './Map.module.css';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet';
 import { useCities } from '@src/contexts/CitiesContext';
+import { useEffect, useState } from 'react';
 
 const position = [51.505, -0.09];
 
@@ -10,28 +18,23 @@ function Map() {
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
 
-  const mapPosition = lat && lng ? [lat, lng] : position;
+  const [mapPosition, setMapPosition] = useState(position);
   const { cities } = useCities();
-  const navigate = useNavigate();
+
+  useEffect(
+    function () {
+      if (lat && lng) {
+        setMapPosition([lat, lng]);
+      }
+    },
+    [lat, lng]
+  );
 
   return (
-    <div className={styles.mapContainer} onClick={() => navigate('form')}>
-      {/* <h3>Map</h3>
-      <p>Position</p>
-      <p>
-        <span>Latitude:</span>
-        {lat}
-      </p>
-      <p>
-        <span>Longityde:</span>
-        {lng}
-      </p>
-      <button onClick={() => setSearchParams({ lat: 23, lng: 50 })}>
-        Change position
-      </button> */}
+    <div className={styles.mapContainer}>
       <MapContainer
         center={mapPosition}
-        zoom={13}
+        zoom={6}
         scrollWheelZoom={true}
         className={styles.map}
       >
@@ -50,9 +53,26 @@ function Map() {
             </Popup>
           </Marker>
         ))}
+        <ChangeCenter position={mapPosition} />
+        <DetectClick />
       </MapContainer>
     </div>
   );
+}
+
+function ChangeCenter({ position }) {
+  const map = useMap();
+  map.setView(position);
+  return null;
+}
+
+function DetectClick() {
+  const navigate = useNavigate();
+  useMapEvents({
+    click: e => {
+      navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+    },
+  });
 }
 
 export default Map;
