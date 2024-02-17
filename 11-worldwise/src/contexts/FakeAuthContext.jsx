@@ -1,23 +1,24 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useReducer } from 'react';
+import useLocalStorageState from '@src/hooks/useLocalStorageState';
+import { createContext, useContext } from 'react';
 
 const AuthContext = createContext();
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'login':
-      return { ...state, isAuthenticated: true, user: action.payload };
-    case 'logout':
-      return { ...state, isAuthenticated: false, user: null };
-    default:
-      break;
-  }
-}
+// function reducer(state, action) {
+//   switch (action.type) {
+//     case 'login':
+//       return { ...state, isAuthenticated: true, user: action.payload };
+//     case 'logout':
+//       return { ...state, isAuthenticated: false, user: null };
+//     default:
+//       break;
+//   }
+// }
 
-const initialState = {
-  isAuthenticated: false,
-  user: null,
-};
+// let initialState = {
+//   isAuthenticated: false,
+//   user: null,
+// };
 
 const FAKE_USER = {
   name: 'Tuan',
@@ -28,19 +29,25 @@ const FAKE_USER = {
 };
 
 function AuthProvider({ children }) {
-  const [{ user, isAuthenticated }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  // const [{ user, isAuthenticated }, dispatch] = useReducer(
+  //   reducer,
+  //   initialState
+  // );
+
+  const [{ isAuthenticated, user }, setAuth] = useLocalStorageState('auth');
+
   function login(email, password) {
     if (email === FAKE_USER.email && password === FAKE_USER.password) {
-      dispatch({ type: 'login', payload: FAKE_USER });
+      // dispatch({ type: 'login', payload: FAKE_USER });
+      setAuth({ user: FAKE_USER, isAuthenticated: true });
     }
   }
 
   function logout() {
-    dispatch({ type: 'logout' });
+    // dispatch({ type: 'logout' });
+    setAuth({ user: null, isAuthenticated: false });
   }
+
   return (
     <AuthContext.Provider
       value={{
