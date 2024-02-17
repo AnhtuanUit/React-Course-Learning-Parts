@@ -111,7 +111,7 @@ function Form() {
         <ReactDatePicker
           id="date"
           selected={date}
-          onChange={e => setDate(e.target.value)}
+          onChange={value => setDate(value)}
           format="DD/MM/YY"
         />
       </div>
