@@ -3,6 +3,7 @@ import styles from './Login.module.css';
 import PageNav from '@src/components/PageNav';
 import { useAuth } from '@src/contexts/FakeAuthContext';
 import { useNavigate } from 'react-router-dom';
+import Button from '@src/components/Button';
 
 export default function Login() {
   // PRE-FILL FOR DEV PURPOSES
@@ -21,7 +22,7 @@ export default function Login() {
   useEffect(
     function () {
       if (isAuthenticated === true) {
-        navigate('/app');
+        navigate('/app', { replace: true });
       }
     },
     [isAuthenticated, navigate]
@@ -52,7 +53,7 @@ export default function Login() {
         </div>
 
         <div>
-          <button>Login</button>
+          <Button type="primary">Login</Button>
         </div>
       </form>
     </main>
