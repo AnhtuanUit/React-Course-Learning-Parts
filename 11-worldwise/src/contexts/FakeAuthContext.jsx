@@ -20,10 +20,11 @@ const initialState = {
 };
 
 const FAKE_USER = {
-  name: 'Jack',
-  email: 'jack@example.com',
-  password: 'qwerty',
-  avatar: 'https://i.pravatar.cc/100?u=zz',
+  name: 'Tuan',
+  email: 'tuando@example.com',
+  password: 'HighSecurityPassword',
+  avatar:
+    'https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F5e132ec7-6974-4943-80c1-9dcf9e5e05ae%2Fc7ccb019-db7d-451b-ab7a-c272fca78a45%2F48926316_1193648000784658_1279668802715385856_n.jpg?table=block&id=2221b0f6-0451-4c98-a3b8-219523485669&spaceId=5e132ec7-6974-4943-80c1-9dcf9e5e05ae&width=250&userId=40207143-4e8e-4f6b-907d-3221c72b46dd&cache=v2',
 };
 
 function AuthProvider({ children }) {
