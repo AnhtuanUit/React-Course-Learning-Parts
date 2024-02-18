@@ -13,7 +13,7 @@ function formatTime(date) {
 }
 
 function App() {
-  const [allowSound, setAllowSound] = useState(true);
+  const [allowSound, setAllowSound] = useState(false);
   const [time, setTime] = useState(formatTime(new Date()));
 
   // Will be be AM or PM
