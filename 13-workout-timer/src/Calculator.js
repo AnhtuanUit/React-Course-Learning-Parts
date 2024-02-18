@@ -11,6 +11,7 @@ function Calculator({ workouts, allowSound }) {
   const mins = Math.floor(duration);
   const seconds = (duration - mins) * 60;
 
+  // eslint-disable-next-line no-unused-vars
   const playSound = function () {
     if (!allowSound) return;
     const sound = new Audio(clickSound);
@@ -22,8 +23,8 @@ function Calculator({ workouts, allowSound }) {
       <form>
         <div>
           <label>Type of workout</label>
-          <select value={number} onChange={(e) => setNumber(+e.target.value)}>
-            {workouts.map((workout) => (
+          <select value={number} onChange={e => setNumber(+e.target.value)}>
+            {workouts.map(workout => (
               <option value={workout.numExercises} key={workout.name}>
                 {workout.name} ({workout.numExercises} exercises)
               </option>
@@ -33,34 +34,34 @@ function Calculator({ workouts, allowSound }) {
         <div>
           <label>How many sets?</label>
           <input
-            type='range'
-            min='1'
-            max='5'
+            type="range"
+            min="1"
+            max="5"
             value={sets}
-            onChange={(e) => setSets(e.target.value)}
+            onChange={e => setSets(e.target.value)}
           />
           <span>{sets}</span>
         </div>
         <div>
           <label>How fast are you?</label>
           <input
-            type='range'
-            min='30'
-            max='180'
-            step='30'
+            type="range"
+            min="30"
+            max="180"
+            step="30"
             value={speed}
-            onChange={(e) => setSpeed(e.target.value)}
+            onChange={e => setSpeed(e.target.value)}
           />
           <span>{speed} sec/exercise</span>
         </div>
         <div>
           <label>Break length</label>
           <input
-            type='range'
-            min='1'
-            max='10'
+            type="range"
+            min="1"
+            max="10"
             value={durationBreak}
-            onChange={(e) => setDurationBreak(e.target.value)}
+            onChange={e => setDurationBreak(e.target.value)}
           />
           <span>{durationBreak} minutes/break</span>
         </div>
