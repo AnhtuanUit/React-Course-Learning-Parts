@@ -1,4 +1,10 @@
-import { useReducer, useEffect, createContext, useContext } from 'react';
+import {
+  useReducer,
+  useEffect,
+  createContext,
+  useContext,
+  useCallback,
+} from 'react';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -66,7 +72,7 @@ function CitiesProvider({ children }) {
     fetchCities();
   }, []);
 
-  async function getCity(id) {
+  const getCity = useCallback(async function (id) {
     if (!id) return;
     try {
       dispatch({ type: 'loading' });
@@ -80,7 +86,7 @@ function CitiesProvider({ children }) {
         payload: 'There was an error loading the city...',
       });
     }
-  }
+  }, []);
 
   async function createCity(newCity) {
     try {

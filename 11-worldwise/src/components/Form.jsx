@@ -1,5 +1,3 @@
-// "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
-
 import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -13,6 +11,7 @@ import ReactDatePicker from 'react-datepicker';
 import { useCities } from '@src/contexts/CitiesContext';
 import { useNavigate } from 'react-router-dom';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
