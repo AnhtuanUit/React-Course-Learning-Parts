@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { PostProvider, usePosts } from './PostContext';
 import Test from './Test';
@@ -9,6 +9,15 @@ function createRandomPost() {
     body: faker.hacker.phrase(),
   };
 }
+
+const Main = memo(function () {
+  return (
+    <main>
+      <FormAddPost />
+      <Posts />
+    </main>
+  );
+});
 
 function App() {
   const [isFakeDark, setIsFakeDark] = useState(false);
@@ -71,15 +80,6 @@ function SearchPosts() {
 function Results() {
   const { posts } = usePosts();
   return <p>🚀 {posts.length} atomic posts found</p>;
-}
-
-function Main() {
-  return (
-    <main>
-      <FormAddPost />
-      <Posts />
-    </main>
-  );
 }
 
 function Posts() {
