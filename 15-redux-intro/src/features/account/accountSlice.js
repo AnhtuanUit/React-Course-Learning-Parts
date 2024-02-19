@@ -1,11 +1,71 @@
-const accountInitialState = {
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
   balance: 0,
   loan: 0,
   loanPurpose: '',
   isLoading: false,
 };
 
-export default function accountReducer(state = accountInitialState, action) {
+const accountSlice = createSlice({
+  name: 'account',
+  initialState,
+  reducers: {
+    deposit(state, action) {
+      state.balance = state.balance + action.payload;
+      state.isLoading = false;
+    },
+    withdraw(state, action) {
+      state.balance = state.balance - action.payload;
+    },
+    requestLoan: {
+      prepare(amount, purpose) {
+        return { payload: { amount, purpose } };
+      },
+      reducer(state, action) {
+        if (state.loan > 0) return;
+        state.balance += action.payload.amount;
+        state.loan += action.payload.amount;
+        state.loanPurpose = action.payload.purpose;
+      },
+    },
+    payLoan(state, action) {
+      if (!state.loan) return;
+      state.balance -= state.loan;
+      state.loan = 0;
+      state.loanPurpose = '';
+    },
+    convertingCurrency(state, action) {
+      state.isLoading = true;
+    },
+  },
+});
+
+export function deposit(amount, currency) {
+  if (currency === 'USD') return { type: 'account/deposit', payload: amount };
+
+  return async function (dispatch, getState) {
+    // 0) Handle loading in UI
+    dispatch({ type: 'account/convertingCurrency' });
+
+    // 1) Convert money
+    const host = 'api.frankfurter.app';
+    const resp = await fetch(
+      `https://${host}/latest?amount=${amount}&from=${currency}&to=USD`
+    );
+
+    const data = await resp.json();
+
+    // 2) Update state by dispatch
+    dispatch(deposit(data?.rates.USD, 'USD'));
+  };
+}
+
+export const { withdraw, requestLoan, payLoan, convertingCurrency } =
+  accountSlice.actions;
+export default accountSlice.reducer;
+
+/* export default function accountReducer(state = initialState, action) {
   switch (action.type) {
     case 'account/withdraw':
       return { ...state, balance: state.balance - action.payload };
@@ -72,4 +132,4 @@ export function requestLoan(amount, purpose) {
 }
 export function payLoan() {
   return { type: 'account/payLoan' };
-}
+} */
