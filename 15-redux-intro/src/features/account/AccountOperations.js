@@ -9,7 +9,8 @@ function AccountOperations() {
   const [loanPurpose, setLoanPurpose] = useState('');
   const [currency, setCurrency] = useState('USD');
 
-  const loan = useSelector(state => state.account.loan);
+  const currentLoan = useSelector(state => state.account.loan);
+  const currentLoanPurpose = useSelector(state => state.account.loanPurpose);
 
   const dispatch = useDispatch();
 
@@ -29,6 +30,7 @@ function AccountOperations() {
     if (!loanAmount || !loanPurpose) return;
     dispatch(requestLoan(loanAmount, loanPurpose));
     setLoanAmount('');
+    setLoanPurpose('');
   }
 
   function handlePayLoan() {
@@ -83,10 +85,14 @@ function AccountOperations() {
           <button onClick={handleRequestLoan}>Request loan</button>
         </div>
 
-        <div>
-          <span>Pay back ${loan}</span>
-          <button onClick={handlePayLoan}>Pay loan</button>
-        </div>
+        {currentLoan > 0 && (
+          <div>
+            <span>
+              Pay back ${currentLoan} ({currentLoanPurpose})
+            </span>
+            <button onClick={handlePayLoan}>Pay loan</button>
+          </div>
+        )}
       </div>
     </div>
   );
