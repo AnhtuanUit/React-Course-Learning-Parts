@@ -40,6 +40,10 @@ export default class App extends React.Component {
     displayLocation: '',
   };
 
+  setLocation(e) {
+    this.setState({ location: e.target.value });
+  }
+
   fetchWeather = async () => {
     this.setState({ isLoading: true });
     try {
@@ -80,14 +84,10 @@ export default class App extends React.Component {
     return (
       <div className="app">
         <h1>Classy Weather</h1>
-        <div>
-          <input
-            type="text"
-            placeholder="Search from location..."
-            value={this.state.location}
-            onChange={e => this.setState({ location: e.target.value })}
-          />
-        </div>
+        <Input
+          onChangeLocation={this.setLocation}
+          location={this.state.location}
+        />
         <button onClick={this.fetchWeather}>Get weather</button>
         {this.state.weather.weathercode && (
           <Weather
@@ -96,6 +96,21 @@ export default class App extends React.Component {
           />
         )}
         {this.state.isLoading && <p className="loader">Loading...</p>}
+      </div>
+    );
+  }
+}
+
+class Input extends React.Component {
+  render() {
+    return (
+      <div>
+        <input
+          type="text"
+          placeholder="Search from location..."
+          value={this.props.location}
+          onChange={this.props.onChangeLocation}
+        />
       </div>
     );
   }
