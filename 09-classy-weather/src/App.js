@@ -1,22 +1,22 @@
 import React from 'react';
 
-// function getWeatherIcon(wmoCode) {
-//   const icons = new Map([
-//     [[0], '☀️'],
-//     [[1], '🌤'],
-//     [[2], '⛅️'],
-//     [[3], '☁️'],
-//     [[45, 48], '🌫'],
-//     [[51, 56, 61, 66, 80], '🌦'],
-//     [[53, 55, 63, 65, 57, 67, 81, 82], '🌧'],
-//     [[71, 73, 75, 77, 85, 86], '🌨'],
-//     [[95], '🌩'],
-//     [[96, 99], '⛈'],
-//   ]);
-//   const arr = [...icons.keys()].find(key => key.includes(wmoCode));
-//   if (!arr) return 'NOT FOUND';
-//   return icons.get(arr);
-// }
+function getWeatherIcon(wmoCode) {
+  const icons = new Map([
+    [[0], '☀️'],
+    [[1], '🌤'],
+    [[2], '⛅️'],
+    [[3], '☁️'],
+    [[45, 48], '🌫'],
+    [[51, 56, 61, 66, 80], '🌦'],
+    [[53, 55, 63, 65, 57, 67, 81, 82], '🌧'],
+    [[71, 73, 75, 77, 85, 86], '🌨'],
+    [[95], '🌩'],
+    [[96, 99], '⛈'],
+  ]);
+  const arr = [...icons.keys()].find(key => key.includes(wmoCode));
+  if (!arr) return 'NOT FOUND';
+  return icons.get(arr);
+}
 
 function convertToFlag(countryCode) {
   const codePoints = countryCode
@@ -26,11 +26,11 @@ function convertToFlag(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
-// function formatDay(dateStr) {
-//   return new Intl.DateTimeFormat('en', {
-//     weekday: 'short',
-//   }).format(new Date(dateStr));
-// }
+function formatDay(dateStr) {
+  return new Intl.DateTimeFormat('en', {
+    weekday: 'short',
+  }).format(new Date(dateStr));
+}
 
 export default class App extends React.Component {
   constructor(props) {
@@ -72,7 +72,7 @@ export default class App extends React.Component {
       );
       const weatherData = await weatherRes.json();
       console.log(weatherData.daily);
-      this.setState({ weatherData: weatherData.daily });
+      this.setState({ weather: weatherData.daily });
     } catch (err) {
       console.error(err);
     } finally {
@@ -93,8 +93,54 @@ export default class App extends React.Component {
           />
         </div>
         <button onClick={this.fetchWeather}>Get weather</button>
-        {this.state.isLoading && <p className="loading">Loading...</p>}
+        {this.state.weather.weathercode && (
+          <Weather
+            displayLocation={this.state.displayLocation}
+            weather={this.state.weather}
+          />
+        )}
+        {this.state.isLoading && <p className="loader">Loading...</p>}
       </div>
+    );
+  }
+}
+
+class Weather extends React.Component {
+  render() {
+    const { time, weathercode, temperature_2m_min, temperature_2m_max } =
+      this.props.weather;
+
+    return (
+      <div>
+        <h2>{this.props.displayLocation}</h2>
+        <ul className="weather">
+          {time.map((date, i) => (
+            <Day
+              key={date}
+              date={date}
+              code={weathercode[i]}
+              min={temperature_2m_min[i]}
+              max={temperature_2m_max[i]}
+              isToday={i === 0}
+            />
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
+class Day extends React.Component {
+  render() {
+    const { date, code, min, max, isToday } = this.props;
+    return (
+      <li className="day">
+        <span>{getWeatherIcon(code)}</span>
+        <p>{isToday ? 'Today' : formatDay(date)}</p>
+        <p>
+          {Math.floor(min)}&deg; &mdash; <strong>{Math.floor(max)}&deg;</strong>
+        </p>
+      </li>
     );
   }
 }
