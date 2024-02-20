@@ -40,12 +40,12 @@ export default class App extends React.Component {
     displayLocation: '',
   };
 
-  setLocation(e) {
-    this.setState({ location: e.target.value });
-  }
+  setLocation = e => this.setState({ location: e.target.value });
 
   fetchWeather = async () => {
-    this.setState({ isLoading: true });
+    if (this.state.location.length < 2) return this.setState({ weather: {} });
+
+    this.setState({ isLoading: true, weather: {} });
     try {
       // 1) Getting location (geocoding)
       const geoRes = await fetch(
@@ -80,6 +80,19 @@ export default class App extends React.Component {
     }
   };
 
+  // useEffect []
+  componentDidMount() {
+    this.setState({ location: localStorage.getItem('location') || '' });
+  }
+
+  // useEffect [location]
+  componentDidUpdate(preProps, preState) {
+    if (preState.location !== this.state.location) {
+      this.fetchWeather();
+      localStorage.setItem('location', this.state.location);
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -88,7 +101,7 @@ export default class App extends React.Component {
           onChangeLocation={this.setLocation}
           location={this.state.location}
         />
-        <button onClick={this.fetchWeather}>Get weather</button>
+
         {this.state.weather.weathercode && (
           <Weather
             displayLocation={this.state.displayLocation}
@@ -117,6 +130,9 @@ class Input extends React.Component {
 }
 
 class Weather extends React.Component {
+  componentWillUnmount() {
+    console.log('Weather will unmount');
+  }
   render() {
     const { time, weathercode, temperature_2m_min, temperature_2m_max } =
       this.props.weather;
