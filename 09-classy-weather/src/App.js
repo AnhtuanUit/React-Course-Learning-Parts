@@ -39,6 +39,7 @@ export default class App extends React.Component {
     weather: {},
     displayLocation: '',
   };
+  timer = null;
 
   setLocation = e => this.setState({ location: e.target.value });
 
@@ -88,7 +89,9 @@ export default class App extends React.Component {
   // useEffect [location]
   componentDidUpdate(preProps, preState) {
     if (preState.location !== this.state.location) {
-      this.fetchWeather();
+      this.timer && clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.fetchWeather(), 500);
+
       localStorage.setItem('location', this.state.location);
     }
   }
