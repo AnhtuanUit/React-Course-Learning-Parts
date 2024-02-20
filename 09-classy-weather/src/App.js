@@ -1,36 +1,29 @@
 import React from 'react';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = { count: 5 };
-    this.handleDec = this.handleDec.bind(this);
-    this.handleInc = this.handleInc.bind(this);
+    this.state = { location: 'vietnam' };
+    this.fetchWeather = this.fetchWeather.bind(this);
   }
 
-  handleDec() {
-    this.setState(currState => {
-      return { count: currState.count - 1 };
-    });
-  }
-
-  handleInc() {
-    this.setState(currState => {
-      return { count: currState.count + 1 };
-    });
+  fetchWeather() {
+    console.log('Loading weather...');
   }
 
   render() {
-    const date = new Date('june 21 2027');
-    date.setDate(date.getDate() + this.state.count);
-
     return (
-      <div>
-        <button onClick={this.handleDec}>-</button>
-        <span>
-          {date.toDateString()} {this.state.count}
-        </span>
-        <button onClick={this.handleInc}>+</button>
+      <div className="app">
+        <h1>Classy Weather</h1>
+        <div>
+          <input
+            type="text"
+            placeholder="Search from location..."
+            value={this.state.location}
+            onChange={e => this.setState({ location: e.target.value })}
+          />
+        </div>
+        <button onClick={this.fetchWeather}>Get weather</button>
       </div>
     );
   }
