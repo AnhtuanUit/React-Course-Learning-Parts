@@ -1,9 +1,8 @@
 // https://uibakery.io/regex-library/phone-number
 
-import { Form, redirect } from 'react-router-dom';
+import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 
-// eslint-disable-next-line no-unused-vars
 const isValidPhone = str =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
     str
@@ -34,6 +33,12 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
+  const navigation = useNavigation();
+  console.log(navigation);
+  const isSubmiting = navigation.state === 'submiting';
+
+  const formErrors = useActionData();
+
   // const [withPriority, setWithPriority] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const cart = fakeCart;
@@ -54,6 +59,7 @@ function CreateOrder() {
           <div>
             <input type="tel" name="phone" required />
           </div>
+          {formErrors?.phone && <p>{formErrors.phone}</p>}
         </div>
 
         <div>
@@ -76,7 +82,9 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button>Order now</button>
+          <button disabled={isSubmiting}>
+            {isSubmiting ? 'Placing order...' : 'Order now'}
+          </button>
         </div>
       </Form>
     </div>
@@ -95,6 +103,14 @@ export async function action({ request }) {
   };
   console.log(order);
 
+  const errors = {};
+  if (!isValidPhone(order.phone))
+    errors.phone =
+      'Please give us correct phone number. We might need it to contact you.';
+
+  if (Object.keys(errors).length > 0) return errors;
+
+  // If everything is okay, create new order and redirect
   const newOrder = await createOrder(order);
 
   return redirect(`/order/${newOrder.id}`);
