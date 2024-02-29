@@ -5,7 +5,7 @@ function OrderItem({ item, isLoadingIngredients, ingredients }) {
   const { quantity, name, totalPrice } = item;
 
   return (
-    <li className="py-3">
+    <li className="space-y-3 py-1">
       <div className="flex  items-center justify-between">
         <p>
           <span className="font-bold">{quantity}&times;</span> {name}
