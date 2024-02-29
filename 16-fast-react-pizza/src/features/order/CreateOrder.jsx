@@ -5,6 +5,11 @@ import { createOrder } from '../../services/apiRestaurant';
 import Button from '@src/ui/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAddress } from '../user/userSlice';
+import { clearCart, getCart, getTotalCartQuantity } from '../cart/cartSlice';
+import EmptyCart from '../cart/EmptyCart';
+import { formatCurrency } from '@src/utils/helpers';
+import { useState } from 'react';
+import store from '@src/store';
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -51,9 +56,14 @@ function CreateOrder() {
 
   const formErrors = useActionData();
 
-  // const [withPriority, setWithPriority] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const cart = fakeCart;
+  const [withPriority, setWithPriority] = useState(false);
+  const cart = useSelector(getCart);
+  const totalCartPrice = useSelector(getTotalCartQuantity);
+
+  if (cart.length === 0) return <EmptyCart />;
+
+  const priorityPrice = withPriority ? 0.2 * totalCartPrice : 0;
+  const totalPrice = totalCartPrice + priorityPrice;
 
   return (
     <div className="px-4 py-6">
@@ -123,8 +133,8 @@ function CreateOrder() {
             type="checkbox"
             name="priority"
             id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
+            value={withPriority}
+            onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label className="font-medium" htmlFor="priority">
             Want to yo give your order priority?
@@ -144,7 +154,9 @@ function CreateOrder() {
           />
 
           <Button disabled={isSubmiting || isAddressLoading} type="primary">
-            {isSubmiting ? 'Placing order...' : 'Order now'}
+            {isSubmiting
+              ? 'Placing order...'
+              : `Order now from ${formatCurrency(totalPrice)}`}
           </Button>
         </div>
       </Form>
@@ -160,7 +172,7 @@ export async function action({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === 'on',
+    priority: data.priority === 'true',
   };
   console.log(order);
 
@@ -174,6 +186,7 @@ export async function action({ request }) {
   // If everything is okay, create new order and redirect
   const newOrder = await createOrder(order);
   console.log(newOrder);
+  store.dispatch(clearCart());
   return redirect(`/order/${newOrder.id}`);
 }
 
