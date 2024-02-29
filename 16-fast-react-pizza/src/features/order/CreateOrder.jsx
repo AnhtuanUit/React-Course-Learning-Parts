@@ -3,7 +3,8 @@
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '@src/ui/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAddress } from '../user/userSlice';
 
 const isValidPhone = (str) =>
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -37,7 +38,8 @@ const fakeCart = [
 function CreateOrder() {
   const username = useSelector((state) => state.user.username);
   const navigation = useNavigation();
-  console.log(navigation);
+  const dispatch = useDispatch();
+
   const isSubmiting = navigation.state === 'submiting';
 
   const formErrors = useActionData();
@@ -52,6 +54,14 @@ function CreateOrder() {
 
       {/* <Form method='POST' action="/order/new"> */}
       <Form method="POST">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(fetchAddress());
+          }}
+        >
+          Get position
+        </button>
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">First Name</label>
           <input
