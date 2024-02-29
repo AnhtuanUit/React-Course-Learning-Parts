@@ -36,11 +36,18 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
-  const username = useSelector((state) => state.user.username);
+  const {
+    username,
+    address,
+    status: addressStatus,
+    error: addressError,
+    position,
+  } = useSelector((state) => state.user);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const isSubmiting = navigation.state === 'submiting';
+  const isAddressLoading = addressStatus === 'loading';
 
   const formErrors = useActionData();
 
@@ -54,14 +61,6 @@ function CreateOrder() {
 
       {/* <Form method='POST' action="/order/new"> */}
       <Form method="POST">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(fetchAddress());
-          }}
-        >
-          Get position
-        </button>
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">First Name</label>
           <input
@@ -87,13 +86,34 @@ function CreateOrder() {
 
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
           <label className="sm:basis-40">Address</label>
-          <div className="grow">
+          <div className="relative grow">
             <input
               className="input w-full"
               type="text"
               name="address"
               required
+              defaultValue={address}
+              disabled={isAddressLoading}
             />
+            {addressStatus === 'error' && (
+              <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                {addressError}
+              </p>
+            )}
+            <span className="absolute right-[3px] top-[3px] z-50 md:right-[5px] md:top-[5px]">
+              {!(position.latitude && position.longitude) && (
+                <Button
+                  type="small"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(fetchAddress());
+                  }}
+                  disabled={isAddressLoading}
+                >
+                  Get position
+                </Button>
+              )}
+            </span>
           </div>
         </div>
 
@@ -113,8 +133,17 @@ function CreateOrder() {
 
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+          <input
+            type="hidden"
+            name="position"
+            value={
+              position.latitude && position.longitude
+                ? `${position.latitude},${position.longitude}`
+                : ''
+            }
+          />
 
-          <Button disabled={isSubmiting} type="primary">
+          <Button disabled={isSubmiting || isAddressLoading} type="primary">
             {isSubmiting ? 'Placing order...' : 'Order now'}
           </Button>
         </div>
@@ -144,7 +173,7 @@ export async function action({ request }) {
 
   // If everything is okay, create new order and redirect
   const newOrder = await createOrder(order);
-
+  console.log(newOrder);
   return redirect(`/order/${newOrder.id}`);
 }
 
