@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { HiOutlineXMark } from 'react-icons/hi2';
 import { cloneElement, createContext, useContext, useState } from 'react';
 import styled from 'styled-components';
+import { useOutsideClick } from './useOutsideClick';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -73,21 +74,32 @@ function Open({ children, opens }) {
   return cloneElement(children, { onClick: () => setShowName(opens) });
 }
 
-function Window({ children, name }) {
-  const { showName, onCloseModal } = useContext(ModalContext);
+function Content({ children }) {
+  const { onCloseModal } = useContext(ModalContext);
+
+  const ref = useOutsideClick(onCloseModal);
+
   return (
-    showName === name &&
-    createPortal(
-      <Overlay>
-        <StyledModal>
-          <Button onClick={onCloseModal}>
-            <HiOutlineXMark />
-          </Button>
-          {cloneElement(children, { onCloseModal })}
-        </StyledModal>
-      </Overlay>,
-      document.body
-    )
+    <StyledModal ref={ref}>
+      <Button onClick={onCloseModal}>
+        <HiOutlineXMark />
+      </Button>
+      {cloneElement(children, { onCloseModal })}
+    </StyledModal>
+  );
+}
+
+function Window({ children, name }) {
+  const { showName } = useContext(ModalContext);
+  const isShow = showName === name;
+
+  if (!isShow) return;
+
+  return createPortal(
+    <Overlay>
+      <Content>{children}</Content>
+    </Overlay>,
+    document.body
   );
 }
 
