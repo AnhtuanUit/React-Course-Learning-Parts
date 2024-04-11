@@ -82,8 +82,8 @@ function Header({ children }) {
     </StyledHeader>
   );
 }
-function Body({ children }) {
-  return <StyledBody role="table">{children}</StyledBody>;
+function Body({ values, render }) {
+  return <StyledBody role="table">{values.map(render)}</StyledBody>;
 }
 function Row({ children }) {
   const { columns } = useContext(TableContext);
