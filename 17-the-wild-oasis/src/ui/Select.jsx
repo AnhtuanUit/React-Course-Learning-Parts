@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useSearchParams } from 'react-router-dom';
 
 const StyledSelect = styled.select`
   font-size: 1.4rem;
@@ -15,19 +14,9 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-function Select({ name, options = [] }) {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const currSort = searchParams.get(name) || 'none';
-
-  function handleSelect(e) {
-    console.log(e.target.value);
-    searchParams.set(name, e.target.value);
-    setSearchParams(searchParams);
-  }
-
+function Select({ options = [], ...props }) {
   return (
-    <StyledSelect onChange={handleSelect} value={currSort}>
+    <StyledSelect {...props}>
       {options.map(option => (
         <option key={option.value} value={option.value}>
           {option.label}

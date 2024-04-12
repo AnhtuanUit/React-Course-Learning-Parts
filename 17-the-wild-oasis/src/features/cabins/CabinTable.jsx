@@ -11,7 +11,7 @@ function CabinTable() {
   const { isLoading, cabins = [] } = useCabins();
 
   const filterValue = searchParam.get('discount') || 'all';
-  const sortBy = searchParam.get('sort');
+  const sortBy = searchParam.get('sort') || '';
 
   // 1) FILTER
   let filteredCabins;
