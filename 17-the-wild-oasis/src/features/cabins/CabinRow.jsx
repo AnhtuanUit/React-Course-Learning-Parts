@@ -9,6 +9,7 @@ import { formatCurrency } from '@src/utils/helpers';
 import { useCreateCabin } from './useCreateCabin';
 import { useDeleteCabin } from './useDeleteCabin';
 import Table from '@src/ui/Table';
+import Menus from '@src/ui/Menus';
 
 const Img = styled.img`
   display: block;
@@ -66,32 +67,37 @@ function CabinRow({ cabin }) {
       )}
 
       <div>
-        <button onClick={handleDuplicateCabin} disabled={isCreating}>
-          <HiSquare2Stack />
-        </button>
-
         <Modal>
-          <Modal.Open opens="update-cabin">
-            <button>
-              <HiPencil />
-            </button>
-          </Modal.Open>
-          <Modal.Open opens="delete-cabin">
-            <button>
-              <HiTrash />
-            </button>
-          </Modal.Open>
+          <Menus.Menu>
+            <Menus.Toggle id={id} />
 
-          <Modal.Window name="update-cabin">
-            <CreateCabinForm cabinToEdit={cabin} />
-          </Modal.Window>
-          <Modal.Window name="delete-cabin">
-            <ConfirmDelete
-              resourceName="cabin"
-              onConfirm={() => deleteCabin(id)}
-              disabled={isDeleting}
-            />
-          </Modal.Window>
+            <Menus.List id={id}>
+              <Menus.Button
+                disabled={isCreating}
+                onClick={handleDuplicateCabin}
+                icon={<HiSquare2Stack />}
+              />
+
+              <Modal.Open opens="update-cabin">
+                <Menus.Button icon={<HiPencil />} />
+              </Modal.Open>
+
+              <Modal.Open opens="delete-cabin">
+                <Menus.Button icon={<HiTrash />} />
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name="update-cabin">
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+            <Modal.Window name="delete-cabin">
+              <ConfirmDelete
+                resourceName="cabin"
+                onConfirm={() => deleteCabin(id)}
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Menus.Menu>
         </Modal>
       </div>
     </Table.Row>
