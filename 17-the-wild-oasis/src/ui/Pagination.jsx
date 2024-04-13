@@ -1,3 +1,4 @@
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledPagination = styled.div`
@@ -55,3 +56,41 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+const PAGE_SIZE = 10;
+
+function Pagination({ page = 1, count, onChange }) {
+  const isLastPage = PAGE_SIZE * page >= count;
+  const isFirstPage = page === 1;
+
+  const from = PAGE_SIZE * (page - 1) + 1;
+  const to = isLastPage ? count : from + PAGE_SIZE - 1;
+
+  function handleNext() {
+    if (!isLastPage) onChange({ currPage: page + 1 });
+  }
+
+  function handlePrevious() {
+    if (!isFirstPage) onChange({ currPage: page - 1 });
+  }
+
+  return (
+    <StyledPagination>
+      <P>
+        Show <span>{from}</span> to <span>{to}</span> of <span>{count}</span>
+      </P>
+      <Buttons>
+        <PaginationButton disabled={isFirstPage} onClick={handlePrevious}>
+          <HiChevronLeft />
+          <span>Previous</span>
+        </PaginationButton>
+        <PaginationButton disabled={isLastPage} onClick={handleNext}>
+          <span>Next</span>
+          <HiChevronRight />
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  );
+}
+
+export default Pagination;

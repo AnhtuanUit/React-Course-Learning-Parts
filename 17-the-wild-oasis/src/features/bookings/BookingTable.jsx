@@ -4,12 +4,19 @@ import Menus from "../../ui/Menus";
 import Empty from "@src/ui/Empty";
 import { useBookings } from "./useBookings";
 import Spinner from "@src/ui/Spinner";
+import Pagination from "@src/ui/Pagination";
+import { useState } from "react";
 
 function BookingTable() {
-  const { bookings, isLoading } = useBookings();
+  const { bookings, isLoading, count = 45 } = useBookings();
+  const [page, setPage] = useState(1);
 
   if (isLoading) return <Spinner />;
   if (!bookings.length) return <Empty resourceName="bookings" />;
+
+  function handlePageChange({ currPage }) {
+    setPage(currPage);
+  }
 
   return (
     <Menus>
@@ -29,6 +36,9 @@ function BookingTable() {
             <BookingRow key={booking.id} booking={booking} />
           )}
         />
+        <Table.Footer>
+          <Pagination page={page} count={count} onChange={handlePageChange} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
