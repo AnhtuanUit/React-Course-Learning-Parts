@@ -5,18 +5,21 @@ import Empty from "@src/ui/Empty";
 import { useBookings } from "./useBookings";
 import Spinner from "@src/ui/Spinner";
 import Pagination from "@src/ui/Pagination";
-import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 function BookingTable() {
-  const { bookings, isLoading, count = 45 } = useBookings();
-  const [page, setPage] = useState(1);
+  const { bookings, isLoading, count } = useBookings();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
   if (!bookings.length) return <Empty resourceName="bookings" />;
 
   function handlePageChange({ currPage }) {
-    setPage(currPage);
+    searchParams.set("page", currPage);
+    setSearchParams(searchParams);
   }
+
+  const page = searchParams.get("page") || 1;
 
   return (
     <Menus>

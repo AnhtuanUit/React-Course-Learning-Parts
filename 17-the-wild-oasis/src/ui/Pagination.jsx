@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from "@src/utils/constants";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import styled from "styled-components";
 
@@ -57,21 +58,21 @@ const PaginationButton = styled.button`
   }
 `;
 
-const PAGE_SIZE = 10;
-
 function Pagination({ page = 1, count, onChange }) {
-  const isLastPage = PAGE_SIZE * page >= count;
-  const isFirstPage = page === 1;
+  const currPage = +page;
 
-  const from = PAGE_SIZE * (page - 1) + 1;
+  const isLastPage = PAGE_SIZE * currPage >= count;
+  const isFirstPage = currPage === 1;
+
+  const from = PAGE_SIZE * (currPage - 1) + 1;
   const to = isLastPage ? count : from + PAGE_SIZE - 1;
 
   function handleNext() {
-    if (!isLastPage) onChange({ currPage: page + 1 });
+    if (!isLastPage) onChange({ currPage: currPage + 1 });
   }
 
   function handlePrevious() {
-    if (!isFirstPage) onChange({ currPage: page - 1 });
+    if (!isFirstPage) onChange({ currPage: currPage - 1 });
   }
 
   return (
