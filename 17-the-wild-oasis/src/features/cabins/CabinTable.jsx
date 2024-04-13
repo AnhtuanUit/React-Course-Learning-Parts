@@ -1,30 +1,30 @@
-import Spinner from '@src/ui/Spinner';
-import CabinRow from './CabinRow';
+import Spinner from "@src/ui/Spinner";
+import CabinRow from "./CabinRow";
 
-import { useCabins } from './useCabins';
-import Table from '@src/ui/Table';
-import Menus from '@src/ui/Menus';
-import { useSearchParams } from 'react-router-dom';
+import { useCabins } from "./useCabins";
+import Table from "@src/ui/Table";
+import Menus from "@src/ui/Menus";
+import { useSearchParams } from "react-router-dom";
 
 function CabinTable() {
-  const [searchParam] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { isLoading, cabins = [] } = useCabins();
 
-  const filterValue = searchParam.get('discount') || 'all';
-  const sortBy = searchParam.get('sort') || '';
+  const filterValue = searchParams.get("discount") || "all";
+  const sortByRaw = searchParams.get("sortBy") || "startDate-desc";
 
   // 1) FILTER
   let filteredCabins;
-  if (filterValue === 'all') filteredCabins = cabins;
-  if (filterValue === 'no-discount')
-    filteredCabins = cabins.filter(cabin => cabin.discount === 0);
-  if (filterValue === 'with-discount')
-    filteredCabins = cabins.filter(cabin => cabin.discount > 0);
+  if (filterValue === "all") filteredCabins = cabins;
+  if (filterValue === "no-discount")
+    filteredCabins = cabins.filter((cabin) => cabin.discount === 0);
+  if (filterValue === "with-discount")
+    filteredCabins = cabins.filter((cabin) => cabin.discount > 0);
 
   // 2) SORT
   const sortedFilteredCabins = [...filteredCabins];
-  const [field, direction] = sortBy.split('-');
-  const modifier = direction === 'asc' ? 1 : -1;
+  const [field, direction] = sortByRaw.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
   sortedFilteredCabins.sort((a, b) => (a[field] - b[field]) * modifier);
 
   if (isLoading) return <Spinner />;
@@ -42,7 +42,7 @@ function CabinTable() {
       <Menus>
         <Table.Body
           values={sortedFilteredCabins}
-          render={cabin => <CabinRow cabin={cabin} key={cabin.id} />}
+          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
         />
       </Menus>
     </Table>
