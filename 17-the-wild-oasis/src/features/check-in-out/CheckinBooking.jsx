@@ -8,6 +8,11 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
+import { useBooking } from "../bookings/useBooking";
+import Spinner from "@src/ui/Spinner";
+import Checkbox from "@src/ui/Checkbox";
+import useCheckIn from "./useCheckin";
+import { useEffect, useState } from "react";
 
 const Box = styled.div`
   /* Box */
@@ -19,9 +24,8 @@ const Box = styled.div`
 
 function CheckinBooking() {
   const moveBack = useMoveBack();
-
-  const booking = {};
-
+  const { booking, isLoading } = useBooking();
+  const { checkin, isCheckingIn } = useCheckIn();
   const {
     id: bookingId,
     guests,
@@ -29,9 +33,19 @@ function CheckinBooking() {
     numGuests,
     hasBreakfast,
     numNights,
+    status,
   } = booking;
+  const isConfirmed = status !== "unconfirmed";
+  const [checked, setChecked] = useState(false);
+  console.log("message", isConfirmed);
 
-  function handleCheckin() {}
+  useEffect(function () {}, []);
+
+  function handleCheckin() {
+    checkin();
+  }
+
+  if (isLoading) return <Spinner />;
 
   return (
     <>
@@ -42,8 +56,24 @@ function CheckinBooking() {
 
       <BookingDataBox booking={booking} />
 
+      <Box>
+        <Checkbox
+          checked={isConfirmed || checked}
+          onChange={() => setChecked((currChecked) => !currChecked)}
+          disabled={isLoading || isConfirmed || isCheckingIn}
+        >
+          I confirm that <span>{guests.name || guests.email}</span> has paid the
+          total amount
+        </Checkbox>
+      </Box>
+
       <ButtonGroup>
-        <Button onClick={handleCheckin}>Check in booking #{bookingId}</Button>
+        <Button
+          onClick={handleCheckin}
+          disabled={isLoading || isConfirmed || isCheckingIn}
+        >
+          Check in booking #{bookingId}
+        </Button>
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>

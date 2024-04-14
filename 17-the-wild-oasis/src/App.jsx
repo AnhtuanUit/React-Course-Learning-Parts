@@ -18,6 +18,7 @@ import AppLayout from "./ui/AppLayout";
 import { StyleSheetManager } from "styled-components";
 import isValidProp from "@emotion/is-prop-valid";
 import Booking from "./pages/Booking";
+import Checkin from "./pages/Checkin";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="bookings" element={<Bookings />} />
               <Route path="bookings/:bookingID" element={<Booking />} />
+              <Route path="bookings/checkin/:bookingID" element={<Checkin />} />
               <Route path="cabins" element={<Cabins />} />
               <Route path="checkin/:bookingID" element={<CheckinBooking />} />
               <Route path="/settings" element={<Settings />} />
