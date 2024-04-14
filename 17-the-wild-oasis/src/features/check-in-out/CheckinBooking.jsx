@@ -11,7 +11,7 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "../bookings/useBooking";
 import Spinner from "@src/ui/Spinner";
 import Checkbox from "@src/ui/Checkbox";
-import useCheckIn from "./useCheckin";
+import useCheckin from "./useCheckin";
 import { useEffect, useState } from "react";
 
 const Box = styled.div`
@@ -25,7 +25,7 @@ const Box = styled.div`
 function CheckinBooking() {
   const moveBack = useMoveBack();
   const { booking, isLoading } = useBooking();
-  const { checkin, isCheckingIn } = useCheckIn();
+  const { checkin, isCheckingIn } = useCheckin();
   const {
     id: bookingId,
     guests,
@@ -70,7 +70,7 @@ function CheckinBooking() {
       <ButtonGroup>
         <Button
           onClick={handleCheckin}
-          disabled={isLoading || isConfirmed || isCheckingIn}
+          disabled={isLoading || !checked || isCheckingIn}
         >
           Check in booking #{bookingId}
         </Button>
