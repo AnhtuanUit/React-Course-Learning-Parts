@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from 'react';
-import styled from 'styled-components';
+import { createContext, useContext, useState } from "react";
+import styled from "styled-components";
 
-import { useOutsideClick } from './useOutsideClick';
-import { HiEllipsisVertical } from 'react-icons/hi2';
+import { useOutsideClick } from "./useOutsideClick";
+import { HiEllipsisVertical } from "react-icons/hi2";
 
 const Menu = styled.div`
   display: flex;
@@ -37,8 +37,8 @@ const StyledList = styled.ul`
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
 
-  right: ${props => props.position.x}px;
-  top: ${props => props.position.y}px;
+  right: ${(props) => props.position.x}px;
+  top: ${(props) => props.position.y}px;
 `;
 
 const StyledButton = styled.button`
@@ -69,11 +69,11 @@ const StyledButton = styled.button`
 const MenusContext = createContext();
 
 function Menus({ children }) {
-  const [openId, setOpenId] = useState('');
+  const [openId, setOpenId] = useState("");
   const [position, setPosition] = useState(null);
 
   function close() {
-    setOpenId('');
+    setOpenId("");
   }
 
   return (
@@ -95,7 +95,7 @@ function Toggle({ id }) {
   const { openId, close, setOpenId, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
-    const rect = e.target.closest('button').getBoundingClientRect();
+    const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
@@ -129,7 +129,7 @@ function List({ children, id }) {
     </StyledList>
   );
 }
-function Button({ icon, onClick }) {
+function Button({ children, icon, onClick }) {
   const { close } = useContext(MenusContext);
 
   function handleClick() {
@@ -140,6 +140,7 @@ function Button({ icon, onClick }) {
   return (
     <StyledButton onClick={handleClick}>
       <span>{icon}</span>
+      {children}
     </StyledButton>
   );
 }

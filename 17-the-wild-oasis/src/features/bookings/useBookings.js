@@ -28,7 +28,5 @@ export function useBookings() {
     queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
-  console.log(bookings, count);
-
   return { isLoading, bookings, error, count };
 }
