@@ -89,7 +89,7 @@ function BookingRow({
           <Menus.Button
             icon={<HiEye />}
             onClick={() => {
-              navigate(`${bookingId}`);
+              navigate(`/bookings/${bookingId}`);
             }}
           >
             See detail

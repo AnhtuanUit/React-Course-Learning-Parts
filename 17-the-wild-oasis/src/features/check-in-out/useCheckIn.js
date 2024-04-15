@@ -14,14 +14,19 @@ function useCheckin() {
     isPending: isCheckingIn,
     error,
   } = useMutation({
-    mutationFn: () =>
-      updateBooking(bookingID, { status: "checked-in", isPaid: true }),
+    mutationFn: (breakfast) => {
+      updateBooking(bookingID, {
+        status: "checked-in",
+        isPaid: true,
+        ...breakfast,
+      });
+    },
     onSuccess: () => {
-      toast.success("Cabin successfully deleted");
+      toast.success("Booking successfully check in");
       queryClient.invalidateQueries({
         queryKey: ["bookings", "booking", bookingID],
       });
-      navigate("/bookings");
+      navigate("/");
     },
     onError: (err) => toast.error(err.message),
   });
