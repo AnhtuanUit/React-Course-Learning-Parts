@@ -10,13 +10,13 @@ function useDeleteBooking() {
     isPendding: isDeleting,
     error,
   } = useMutation({
-    mutationFn: (bookingId) => {
-      deleteBookingApi(bookingId);
-    },
+    mutationFn: (id) => deleteBookingApi(id),
     onSuccess: () => {
       toast.success("Booking successfully deleted");
 
-      queryClient.invalidateQueries("bookings");
+      queryClient.invalidateQueries({
+        queryKey: ["bookings"],
+      });
     },
     onError: (err) => {
       toast.error(err.message);
