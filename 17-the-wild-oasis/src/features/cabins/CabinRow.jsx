@@ -1,15 +1,15 @@
-import styled from 'styled-components';
-import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+import styled from "styled-components";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 
-import Modal from '@src/ui/Modal';
-import ConfirmDelete from '@src/ui/ConfirmDelete';
-import CreateCabinForm from './CreateCabinForm';
+import Modal from "@src/ui/Modal";
+import ConfirmDelete from "@src/ui/ConfirmDelete";
+import CreateCabinForm from "./CreateCabinForm";
 
-import { formatCurrency } from '@src/utils/helpers';
-import { useCreateCabin } from './useCreateCabin';
-import { useDeleteCabin } from './useDeleteCabin';
-import Table from '@src/ui/Table';
-import Menus from '@src/ui/Menus';
+import { formatCurrency } from "@src/utils/helpers";
+import { useCreateCabin } from "./useCreateCabin";
+import { useDeleteCabin } from "./useDeleteCabin";
+import Table from "@src/ui/Table";
+import Menus from "@src/ui/Menus";
 
 const Img = styled.img`
   display: block;
@@ -24,16 +24,16 @@ const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
-  font-family: 'Sono';
+  font-family: "Sono";
 `;
 
 const Price = styled.div`
-  font-family: 'Sono';
+  font-family: "Sono";
   font-weight: 600;
 `;
 
 const Discount = styled.div`
-  font-family: 'Sono';
+  font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
 `;
@@ -76,14 +76,16 @@ function CabinRow({ cabin }) {
                 disabled={isCreating}
                 onClick={handleDuplicateCabin}
                 icon={<HiSquare2Stack />}
-              />
+              >
+                Duplicate
+              </Menus.Button>
 
               <Modal.Open opens="update-cabin">
-                <Menus.Button icon={<HiPencil />} />
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
 
               <Modal.Open opens="delete-cabin">
-                <Menus.Button icon={<HiTrash />} />
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
             </Menus.List>
 
