@@ -1,3 +1,6 @@
+import LoginForm from "@src/features/authentication/LoginForm";
+import Heading from "@src/ui/Heading";
+import Logo from "@src/ui/Logo";
 import styled from "styled-components";
 
 const LoginLayout = styled.main`
@@ -11,7 +14,13 @@ const LoginLayout = styled.main`
 `;
 
 function Login() {
-  return <LoginLayout>Login</LoginLayout>;
+  return (
+    <LoginLayout>
+      <Logo />
+      <Heading as="h4">Login to your account</Heading>
+      <LoginForm />
+    </LoginLayout>
+  );
 }
 
 export default Login;
