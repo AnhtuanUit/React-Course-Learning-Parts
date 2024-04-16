@@ -9,11 +9,13 @@ export function useUser() {
   } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
+    retry: false,
   });
 
   return {
     isLoading,
-    error,
-    isAuthenticated: user?.user?.role === "authenticated",
+    isAuthenticated:
+      user?.user?.role === "authenticated" &&
+      !(error?.message === "User session not found"),
   };
 }
