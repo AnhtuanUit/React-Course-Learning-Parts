@@ -1,8 +1,9 @@
 import Logout from "@src/features/authentication/Logout";
 import styled from "styled-components";
 import ButtonIcon from "./ButtonIcon";
-import { HiOutlineUser } from "react-icons/hi2";
+import { HiOutlineMoon, HiOutlineSun, HiOutlineUser } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "@src/context/DarkModeContext";
 
 const StyledHeaderMenu = styled.ul`
   display: flex;
@@ -12,11 +13,18 @@ const StyledHeaderMenu = styled.ul`
 function HeaderMenu() {
   const navigate = useNavigate();
 
+  const { isDarkMode, handleDarkMode } = useDarkMode();
+
   return (
     <StyledHeaderMenu>
       <li>
         <ButtonIcon onClick={() => navigate("/account")}>
           <HiOutlineUser />
+        </ButtonIcon>
+      </li>
+      <li>
+        <ButtonIcon onClick={() => handleDarkMode(!isDarkMode)}>
+          {isDarkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
         </ButtonIcon>
       </li>
       <li>

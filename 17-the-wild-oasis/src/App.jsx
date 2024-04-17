@@ -20,6 +20,7 @@ import isValidProp from "@emotion/is-prop-valid";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
+import DarkModeContext from "./context/DarkModeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,7 +44,9 @@ function App() {
             <Route
               element={
                 <ProtectedRoute>
-                  <AppLayout />
+                  <DarkModeContext>
+                    <AppLayout />
+                  </DarkModeContext>
                 </ProtectedRoute>
               }
             >

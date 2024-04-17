@@ -42,7 +42,7 @@ function CheckinBooking() {
 
   const extrasPrice = booking.hasBreakfast
     ? booking.extrasPrice
-    : numNights * setting.breakfastPrice * booking.numGuests;
+    : numNights * setting.breakfastPrice * numGuests;
 
   const isConfirmed = status !== "unconfirmed";
   const [checked, setChecked] = useState(false);
