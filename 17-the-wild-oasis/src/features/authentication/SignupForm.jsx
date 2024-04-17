@@ -3,14 +3,17 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { useSignup } from "./useSingup";
 
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
   const { getValues, register, formState, handleSubmit } = useForm();
+  const { signup, isLoading } = useSignup();
 
   function onSubmit(data) {
     console.log(data);
+    signup(data);
   }
 
   // console.log(formState.errors);
@@ -19,6 +22,7 @@ function SignupForm() {
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Full name" error={formState.errors.fullName?.message}>
         <Input
+          disabled={isLoading}
           type="text"
           id="fullName"
           {...register("fullName", {
@@ -29,6 +33,7 @@ function SignupForm() {
 
       <FormRow label="Email address" error={formState.errors.email?.message}>
         <Input
+          disabled={isLoading}
           type="email"
           id="email"
           autoComplete="username"
@@ -44,6 +49,7 @@ function SignupForm() {
         error={formState.errors.password?.message}
       >
         <Input
+          disabled={isLoading}
           type="password"
           id="password"
           autoComplete="new-password"
@@ -62,6 +68,7 @@ function SignupForm() {
         error={formState.errors.passwordConfirm?.message}
       >
         <Input
+          disabled={isLoading}
           type="password"
           id="passwordConfirm"
           autoComplete="new-password"
