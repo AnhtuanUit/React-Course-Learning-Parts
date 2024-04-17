@@ -13,7 +13,7 @@ const StyledHeaderMenu = styled.ul`
 function HeaderMenu() {
   const navigate = useNavigate();
 
-  const { isDarkMode, handleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleMode } = useDarkMode();
 
   return (
     <StyledHeaderMenu>
@@ -23,7 +23,7 @@ function HeaderMenu() {
         </ButtonIcon>
       </li>
       <li>
-        <ButtonIcon onClick={() => handleDarkMode(!isDarkMode)}>
+        <ButtonIcon onClick={toggleMode}>
           {isDarkMode ? <HiOutlineSun /> : <HiOutlineMoon />}
         </ButtonIcon>
       </li>

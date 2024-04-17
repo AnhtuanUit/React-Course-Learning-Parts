@@ -40,31 +40,35 @@ function App() {
       >
         <GlobalStyles />
         <BrowserRouter>
-          <Routes>
-            <Route
-              element={
-                <ProtectedRoute>
-                  <DarkModeContext>
+          <DarkModeContext>
+            <Routes>
+              <Route
+                element={
+                  <ProtectedRoute>
                     <AppLayout />
-                  </DarkModeContext>
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="bookings" element={<Bookings />} />
-              <Route path="bookings/:bookingID" element={<Booking />} />
-              <Route path="bookings/checkin/:bookingID" element={<Checkin />} />
-              <Route path="cabins" element={<Cabins />} />
-              <Route path="checkin/:bookingID" element={<CheckinBooking />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="users" element={<NewUsers />} />
-              <Route path="account" element={<Account />} />
-            </Route>
-            <Route path="login" element={<Login />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate replace to="dashboard" />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="bookings" element={<Bookings />} />
+                <Route path="bookings/:bookingID" element={<Booking />} />
+                <Route
+                  path="bookings/checkin/:bookingID"
+                  element={<Checkin />}
+                />
+                <Route path="cabins" element={<Cabins />} />
+                <Route path="checkin/:bookingID" element={<CheckinBooking />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="users" element={<NewUsers />} />
+                <Route path="account" element={<Account />} />
+              </Route>
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </DarkModeContext>
         </BrowserRouter>
+
         <Toaster
           position="top-center"
           gutter={12}
