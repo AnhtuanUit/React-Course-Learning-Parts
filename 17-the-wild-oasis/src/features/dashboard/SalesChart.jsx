@@ -1,5 +1,17 @@
 import styled from "styled-components";
 import DashboardBox from "./DashboardBox";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import Heading from "@src/ui/Heading";
+import { useDarkMode } from "@src/context/DarkModeContext";
+import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
@@ -43,17 +55,74 @@ const fakeData = [
   { label: "Feb 06", totalSales: 1450, extrasSales: 400 },
 ];
 
-const isDarkMode = true;
-const colors = isDarkMode
-  ? {
-      totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
-      extrasSales: { stroke: "#22c55e", fill: "#22c55e" },
-      text: "#e5e7eb",
-      background: "#18212f",
-    }
-  : {
-      totalSales: { stroke: "#4f46e5", fill: "#c7d2fe" },
-      extrasSales: { stroke: "#16a34a", fill: "#dcfce7" },
-      text: "#374151",
-      background: "#fff",
-    };
+function SalesChart({ numDays, bookings }) {
+  const { isDarkMode } = useDarkMode();
+  const colors = isDarkMode
+    ? {
+        totalSales: { stroke: "#4f46e5", fill: "#4f46e5" },
+        extrasSales: { stroke: "#22c55e", fill: "#22c55e" },
+        text: "#e5e7eb",
+        background: "#18212f",
+      }
+    : {
+        totalSales: { stroke: "#4f46e5", fill: "#c7d2fe" },
+        extrasSales: { stroke: "#16a34a", fill: "#dcfce7" },
+        text: "#374151",
+        background: "#fff",
+      };
+  // { label: "Feb 06", totalSales: 1450, extrasSales: 400 },
+
+  // Generate list of date for each colum of chart
+  const allDates = eachDayOfInterval({
+    start: subDays(new Date(), numDays),
+    end: new Date(),
+  });
+
+  const formatedData = allDates.map((date) => ({
+    label: format(date, "MMM dd"),
+    totalSales: bookings
+      .filter((booking) => isSameDay(booking.created_at, date))
+      .reduce((acc, cur) => acc + cur.totalPrice, 0),
+    extrasSales: bookings
+      .filter((booking) => isSameDay(booking.created_at, date))
+      .reduce((acc, cur) => acc + cur.extrasPrice, 0),
+  }));
+
+  return (
+    <StyledSalesChart>
+      <Heading as="h2">Sales</Heading>
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart data={formatedData}>
+          <XAxis
+            dataKey="label"
+            tick={{ fill: colors.text }}
+            tickLine={{ stroke: colors.text }}
+          />
+          <YAxis unit="$" />
+          <CartesianGrid stroke="#ccc" strokeDasharray="4" />
+          <Tooltip contentStyle={{ backgroundColor: colors.background }} />
+          <Area
+            dataKey="totalSales"
+            type="monotone"
+            stroke={colors.totalSales.stroke}
+            fill={colors.totalSales.fill}
+            strokeWidth={2}
+            name="Total sales"
+            unit="$"
+          />
+          <Area
+            dataKey="extrasSales"
+            type="monotone"
+            stroke={colors.extrasSales.stroke}
+            fill={colors.extrasSales.fill}
+            strokeWidth={2}
+            name="Extras sales"
+            unit="$"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </StyledSalesChart>
+  );
+}
+
+export default SalesChart;
