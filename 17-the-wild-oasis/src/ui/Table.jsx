@@ -1,5 +1,5 @@
-import { createContext, useContext } from 'react';
-import styled from 'styled-components';
+import { createContext, useContext } from "react";
+import styled from "styled-components";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -12,7 +12,7 @@ const StyledTable = styled.div`
 
 const CommonRow = styled.div`
   display: grid;
-  grid-template-columns: ${props => props.columns};
+  grid-template-columns: ${(props) => props.columns};
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
@@ -98,5 +98,6 @@ Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
 Table.Footer = Footer;
+Table.Empty = Empty;
 
 export default Table;

@@ -26,7 +26,7 @@ const Box = styled.div`
 
 function CheckinBooking() {
   const moveBack = useMoveBack();
-  const { booking, isLoading } = useBooking();
+  const { booking = {}, isLoading } = useBooking();
   const { checkin } = useCheckin();
   const { setting = {} } = useSetting();
   const {

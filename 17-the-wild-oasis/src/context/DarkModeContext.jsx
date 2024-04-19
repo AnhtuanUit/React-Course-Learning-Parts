@@ -1,10 +1,10 @@
-import { useLocalStorageState } from "@src/hooks/useLocalStorageState";
 import { createContext, useContext, useEffect } from "react";
+import { useLocalStorageState } from "@src/hooks/useLocalStorageState";
 
 const DarkModeContext = createContext();
 
 function DarkModeProvider({ children }) {
-  const [isDarkMode, setDarkMode] = useLocalStorageState("theme-mode");
+  const [isDarkMode, setDarkMode] = useLocalStorageState(false, "theme-mode");
 
   useEffect(function () {
     if (isDarkMode) {
@@ -27,6 +27,7 @@ function DarkModeProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useDarkMode = function () {
   const context = useContext(DarkModeContext);
   if (!context) {
