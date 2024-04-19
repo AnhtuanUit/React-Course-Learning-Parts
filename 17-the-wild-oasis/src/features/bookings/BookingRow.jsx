@@ -112,7 +112,7 @@ function BookingRow({
                   navigate(`checkin/${bookingId}`);
                 }}
               >
-                Check in
+                Checkin
               </Menus.Button>
             )}
 
@@ -121,7 +121,7 @@ function BookingRow({
                 icon={<HiArrowUpOnSquare />}
                 onClick={() => checkout(bookingId)}
               >
-                Check out
+                Checkout
               </Menus.Button>
             )}
 

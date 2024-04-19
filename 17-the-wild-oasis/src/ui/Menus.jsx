@@ -7,7 +7,9 @@ import { HiEllipsisVertical } from "react-icons/hi2";
 const Menu = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  position: relative;
+  justify-self: flex-end;
 `;
 
 const StyledToggle = styled.button`
@@ -15,7 +17,6 @@ const StyledToggle = styled.button`
   border: none;
   padding: 0.4rem;
   border-radius: var(--border-radius-sm);
-  transform: translateX(0.8rem);
   transition: all 0.2s;
 
   &:hover {
@@ -31,14 +32,14 @@ const StyledToggle = styled.button`
 
 const StyledList = styled.ul`
   z-index: 1;
-  position: fixed;
-
+  white-space: nowrap;
+  position: absolute;
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
 
-  right: ${(props) => props.position.x}px;
-  top: ${(props) => props.position.y}px;
+  top: calc(100% + 5px);
+  right: 0%;
 `;
 
 const StyledButton = styled.button`
@@ -70,7 +71,6 @@ const MenusContext = createContext();
 
 function Menus({ children }) {
   const [openId, setOpenId] = useState("");
-  const [position, setPosition] = useState(null);
 
   function close() {
     setOpenId("");
@@ -80,8 +80,6 @@ function Menus({ children }) {
     <MenusContext.Provider
       value={{
         openId,
-        position,
-        setPosition,
         close,
         setOpenId,
       }}
@@ -92,16 +90,10 @@ function Menus({ children }) {
 }
 
 function Toggle({ id }) {
-  const { openId, close, setOpenId, setPosition } = useContext(MenusContext);
+  const { openId, close, setOpenId } = useContext(MenusContext);
 
   function handleClick(e) {
     e.stopPropagation();
-
-    const rect = e.target.closest("button").getBoundingClientRect();
-    setPosition({
-      x: window.innerWidth - rect.width - rect.x,
-      y: rect.y + rect.height + 8,
-    });
 
     if (openId === id) {
       close();
@@ -117,17 +109,13 @@ function Toggle({ id }) {
   );
 }
 function List({ children, id }) {
-  const { openId, position, close } = useContext(MenusContext);
+  const { openId, close } = useContext(MenusContext);
   const ref = useOutsideClick(close, false);
 
   const isOpen = id && openId === id;
   if (!isOpen) return null;
 
-  return (
-    <StyledList position={position} ref={ref}>
-      {children}
-    </StyledList>
-  );
+  return <StyledList ref={ref}>{children}</StyledList>;
 }
 function Button({ children, icon, onClick }) {
   const { close } = useContext(MenusContext);
@@ -140,7 +128,7 @@ function Button({ children, icon, onClick }) {
   return (
     <StyledButton onClick={handleClick}>
       <span>{icon}</span>
-      {children}
+      <span>{children}</span>
     </StyledButton>
   );
 }
